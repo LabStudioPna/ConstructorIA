@@ -1,32 +1,48 @@
 <svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bgOg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#1E3A5F"/>
-      <stop offset="1" stop-color="#0E1826"/>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2E1D0E"/>
+      <stop offset="1" stop-color="#1A1108"/>
     </linearGradient>
-    <radialGradient id="glow" cx="85%" cy="15%" r="60%">
-      <stop offset="0" stop-color="#B85C38" stop-opacity="0.35"/>
-      <stop offset="1" stop-color="#B85C38" stop-opacity="0"/>
+    <radialGradient id="glow" cx="0.82" cy="0.18" r="0.55">
+      <stop offset="0" stop-color="#C87D2F" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#C87D2F" stop-opacity="0"/>
     </radialGradient>
+    <linearGradient id="iconBg" x1="0" y1="0" x2="150" y2="150" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#C87D2F"/>
+      <stop offset="1" stop-color="#7A4A1A"/>
+    </linearGradient>
   </defs>
-  <rect width="1200" height="630" fill="url(#bgOg)"/>
+
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
   <rect width="1200" height="630" fill="url(#glow)"/>
 
+  <!-- icono -->
   <g transform="translate(90,90)">
-    <rect width="150" height="150" rx="34" fill="#0E1826" stroke="#3E6A96" stroke-width="2"/>
-    <path d="M75 34 L120 73 V115 C120 118 117.6 120.4 114.7 120.4 H39.3 C36.4 120.4 34 118 34 115 V73 Z" fill="#F8F9FA"/>
-    <path d="M27 70 L75 31 L123 70" stroke="#F8F9FA" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-    <rect x="64.5" y="85" width="21" height="34" rx="3" fill="#1E3A5F"/>
-    <path d="M104 46 L109 56 L119 61 L109 66 L104 76 L99 66 L89 61 L99 56 Z" fill="#B85C38"/>
+    <rect width="150" height="150" rx="34" fill="url(#iconBg)"/>
+    <line x1="52" y1="117" x2="52" y2="33" stroke="#FBF3E9" stroke-width="5.5" stroke-linecap="round"/>
+    <line x1="52" y1="35" x2="104" y2="35" stroke="#FBF3E9" stroke-width="5.5" stroke-linecap="round"/>
+    <line x1="52" y1="35" x2="35" y2="50" stroke="#FBF3E9" stroke-width="4.5" stroke-linecap="round"/>
+    <line x1="89" y1="35" x2="89" y2="60" stroke="#FBF3E9" stroke-width="4" stroke-linecap="round"/>
+    <rect x="82" y="60" width="14" height="10" rx="2.5" fill="#FBF3E9"/>
+    <line x1="52" y1="35" x2="63" y2="56" stroke="#FBF3E9" stroke-width="3.5" stroke-linecap="round"/>
+    <rect x="39" y="114" width="26" height="8" rx="2.5" fill="#FBF3E9"/>
+    <path d="M104 88 L109 97 L118 102 L109 107 L104 116 L99 107 L90 102 L99 97 Z" fill="#F5C453"/>
   </g>
 
-  <text x="90" y="300" font-family="'Poppins','Segoe UI',sans-serif" font-size="62" font-weight="700" fill="#F8F9FA">Mi Prop<tspan fill="#B85C38">IA</tspan></text>
-  <text x="90" y="352" font-family="'Segoe UI',sans-serif" font-size="30" font-weight="400" fill="#C7D6E5">Tu gestor inmobiliario experto en IA</text>
+  <!-- título -->
+  <text x="90" y="335" font-family="'Poppins','Segoe UI',sans-serif" font-size="72" font-weight="700" fill="#FBF3E9">Constructor<tspan fill="#E0A45A">IA</tspan></text>
 
-  <line x1="90" y1="400" x2="1110" y2="400" stroke="#3E6A96" stroke-width="1.5"/>
+  <!-- tagline -->
+  <text x="90" y="385" font-family="'Inter','Segoe UI',sans-serif" font-size="30" fill="#D8CBBC">Tu asistente de obra experto en IA</text>
 
-  <text x="90" y="450" font-family="'Segoe UI',sans-serif" font-size="26" fill="#E3E9EF">Analiza contratos · calcula sellado y comisiones</text>
-  <text x="90" y="488" font-family="'Segoe UI',sans-serif" font-size="26" fill="#E3E9EF">te avisa antes de que algo venza.</text>
+  <!-- divider -->
+  <line x1="90" y1="430" x2="1110" y2="430" stroke="#5C4630" stroke-width="1"/>
 
-  <text x="90" y="580" font-family="'Segoe UI',sans-serif" font-size="22" fill="#8FA6BE">labstudiopna.github.io/MiPropIA</text>
+  <!-- descripción -->
+  <text x="90" y="480" font-family="'Inter','Segoe UI',sans-serif" font-size="26" fill="#EDE4D9">Presupuesta, analiza planos y predice costos</text>
+  <text x="90" y="514" font-family="'Inter','Segoe UI',sans-serif" font-size="26" fill="#EDE4D9">de obra con inteligencia artificial.</text>
+
+  <!-- url -->
+  <text x="90" y="580" font-family="'Inter','Segoe UI',sans-serif" font-size="22" fill="#9C8A76">labstudiopna.github.io/ConstructorIA</text>
 </svg>

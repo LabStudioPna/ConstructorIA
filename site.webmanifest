@@ -1,18 +1,14 @@
 {
-  "name": "MiPropIA — Tu gestor inmobiliario experto en IA",
-  "short_name": "MiPropIA",
-  "description": "Analiza contratos, calcula sellado y comisiones, y te avisa antes de que algo venza.",
-  "start_url": "../index.html",
-  "scope": "../",
+  "name": "ConstructorIA",
+  "short_name": "ConstructorIA",
+  "description": "Tu asistente de obra experto en IA — presupuestos, análisis de planos, renders 3D y predicciones de costos.",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "orientation": "portrait-primary",
-  "background_color": "#FBF9F6",
-  "theme_color": "#1F4B3F",
-  "lang": "es-AR",
+  "background_color": "#F9FAFB",
+  "theme_color": "#C87D2F",
   "icons": [
-    { "src": "favicon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "favicon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "favicon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
-    { "src": "favicon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    { "src": "favicon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "favicon-512.png", "sizes": "512x512", "type": "image/png" }
   ]
 }

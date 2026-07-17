@@ -6,7 +6,19 @@
   <meta name="description" content="Presupuesta, analiza planos y calcula costos en segundos. Asistente de IA para constructores argentinos. Sin instalación, tus datos siempre bajo control.">
   <meta name="og:title" content="ConstructorIA — Tu asistente de obra experto en IA">
   <meta name="og:description" content="Presupuesta, analiza planos y predice costos. Para constructores que no quieren perder tiempo en Excel.">
+  <meta property="og:image" content="https://labstudiopna.github.io/ConstructorIA/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://labstudiopna.github.io/ConstructorIA/og-image.png">
   <meta name="theme-color" content="#C87D2F">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="manifest" href="site.webmanifest">
   <title>ConstructorIA — Presupuestos con IA</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -244,53 +256,6 @@
       <a href="guia-completa.html">📚 Guía</a>
     </nav>
     <a href="agente-constructor.html" class="cta-header">Ir al Agente →</a>
-    <script defer>
-(function() {
-  const WEBHOOK_URL = 'https://vps-6064485-x.dattaweb.com/workflow/tY9xOxrx1wtPtFIb';
-  
-  const getLandingName = () => {
-    const path = window.location.pathname.split('/')[1].toLowerCase();
-    if (path === 'fiscoia') return 'FiscoIA';
-    if (path === 'campoια') return 'CampoIA';
-    if (path === 'mipropia') return 'MiPropIA';
-    if (!path || path === '') return 'LABStudio';
-    return 'Desconocida';
-  };
-
-  const getDevice = () => {
-    return /Mobile|Android|iPhone|iPad|iPod/.test(navigator.userAgent) ? 'Mobile' : 'Desktop';
-  };
-
-  const trackView = async () => {
-    try {
-      const geo = await fetch('https://ipapi.co/json/').then(r => r.json());
-      const payload = {
-        landing: getLandingName(),
-        fecha: new Date().toLocaleString('es-AR'),
-        ip: geo.ip || 'Error',
-        pais: geo.country_name || 'Desconocido',
-        ciudad: geo.city || 'Desconocida',
-        dispositivo: getDevice(),
-        pagina: window.location.href
-      };
-      await fetch(WEBHOOK_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      console.log('✅ Tracker enviado:', payload);
-    } catch (error) {
-      console.log('Tracker error:', error);
-    }
-  };
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', trackView);
-  } else {
-    trackView();
-  }
-})();
-</script>
   </header>
 
   <main class="container">
