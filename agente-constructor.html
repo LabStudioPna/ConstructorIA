@@ -30,8 +30,6 @@
       overflow-x: hidden;
     }
     .wrapper {
-      display: grid;
-      grid-template-columns: 240px 1fr;
       min-height: 100vh;
     }
     .sidebar {
@@ -39,9 +37,12 @@
       border-right: 1px solid var(--border);
       padding: 20px;
       position: fixed;
+      top: 0;
+      left: 0;
       width: 240px;
       height: 100vh;
       overflow-y: auto;
+      z-index: 10;
     }
     .logo {
       font-size: 16px;
@@ -196,9 +197,6 @@
       color: var(--text-light);
     }
     @media (max-width: 768px) {
-      .wrapper {
-        grid-template-columns: 1fr;
-      }
       .sidebar {
         position: static;
         width: 100%;
@@ -218,6 +216,8 @@
       }
     }
   </style>
+  <!-- Tracker de vistas (oculto) -->
+  <script src="tracker.js" defer></script>
 </head>
 <body>
   <div class="wrapper">
