@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — Página no encontrada · ConstructorIA</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:     #1A1410;
+    --primary: #C87D2F;
+    --amber:   #F59E0B;
+    --text:    #F3F1EC;
+    --muted:   #A8998A;
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--ink);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+  }
+
+  .page {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* fondo con textura de obra (grid sutil) */
+  .bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,125,47,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,125,47,0.07) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(26,20,16,0.92) 0%,
+      rgba(26,20,16,0.75) 40%,
+      rgba(26,20,16,0.92) 100%
+    );
+  }
+
+  /* scan line animada */
+  .scan {
+    position: absolute;
+    left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--primary), var(--amber), transparent);
+    opacity: 0.5;
+    animation: scan 8s linear infinite;
+    z-index: 1;
+  }
+  @keyframes scan { 0%{ top: 0% } 100%{ top: 100% } }
+
+  /* glows */
+  .glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.18;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .glow-a { width: 500px; height: 500px; background: var(--primary); top: -180px; left: -150px; }
+  .glow-b { width: 440px; height: 440px; background: var(--amber); bottom: -180px; right: -120px; }
+
+  /* contenido */
+  .content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 40px 24px;
+    max-width: 540px;
+  }
+
+  .mono {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .mono::before,
+  .mono::after {
+    content: '';
+    width: 32px;
+    height: 1px;
+    background: var(--primary);
+    opacity: 0.6;
+  }
+
+  .code {
+    font-size: clamp(6rem, 18vw, 10rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--amber) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+
+  p {
+    font-size: 0.98rem;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 40px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, var(--primary), var(--amber));
+    color: #1A1410;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.92rem;
+    padding: 13px 28px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: opacity 0.3s, transform 0.3s;
+    letter-spacing: 0.01em;
+  }
+  .btn:hover { opacity: 0.85; transform: translateY(-2px); }
+
+  .logo {
+    position: absolute;
+    top: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    text-decoration: none;
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--amber));
+    flex-shrink: 0;
+  }
+  .thin { font-weight: 400; opacity: 0.7; }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="bg"></div>
+  <div class="scan"></div>
+  <div class="glow glow-a"></div>
+  <div class="glow glow-b"></div>
+
+  <a href="index.html" class="logo">
+    <span class="dot"></span>🏗️ Constructor<span class="thin">IA</span>
+  </a>
+
+  <div class="content">
+    <div class="mono">Obra no encontrada</div>
+    <div class="code">404</div>
+    <h1>Esta página no existe</h1>
+    <p>La URL que buscás no está en nuestros planos.<br>Puede que haya sido movida o nunca existió.</p>
+    <a href="index.html" class="btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5M12 5l-7 7 7 7"/>
+      </svg>
+      Volver al inicio
+    </a>
+  </div>
+</div>
+
+<script src="tracker.js" defer></script>
+</body>
+</html>
