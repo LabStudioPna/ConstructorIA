@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ConstructorIA v2.0 — Advanced Analytics & AI</title>
+  <meta name="description" content="ConstructorIA v2.0: Dashboard avanzado, predicciones ML, team collaboration, timeline planning.">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #C87D2F;
+      --primary-light: #D89A4D;
+      --primary-dark: #A0621E;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --error: #EF4444;
+      --text: #1A1A1A;
+      --text-light: #666666;
+      --border: #E5E7EB;
+      --surface: #FFFFFF;
+      --bg: #F9FAFB;
+      --icon-primary: #C87D2F;
+      --icon-success: #10B981;
+      --icon-warning: #F59E0B;
+    }
+
+    [data-theme="dark"] {
+      --text: #FFFFFF;
+      --text-light: #CCCCCC;
+      --border: #333333;
+      --surface: #1F1F1F;
+      --bg: #121212;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* Header */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .header-right {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 60px;
+      width: 240px;
+      height: calc(100vh - 60px);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      padding: 16px 0;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      color: var(--text-light);
+      text-decoration: none;
+      border-left: 3px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .nav-item:hover {
+      background: var(--bg);
+      color: var(--primary);
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+      border-left-color: var(--primary);
+      background: var(--bg);
+    }
+
+    .icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    /* Main Content */
+    main {
+      margin-left: 240px;
+      padding: 24px;
+      min-height: calc(100vh - 60px);
+    }
+
+    /* Dashboard Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s;
+    }
+
+    .card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .metric {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 12px 0;
+    }
+
+    .metric-change {
+      font-size: 14px;
+      color: var(--success);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .metric-change.negative {
+      color: var(--error);
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 24px;
+      background: var(--surface);
+      padding: 0 20px;
+    }
+
+    .tab {
+      padding: 12px 16px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      color: var(--text-light);
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+      font-weight: 500;
+    }
+
+    .tab:hover {
+      color: var(--primary);
+    }
+
+    .tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Analytics Section */
+    .analytics-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .chart-placeholder {
+      background: var(--bg);
+      border: 2px dashed var(--border);
+      border-radius: 8px;
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--text-light);
+      min-height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Team Collaboration */
+    .team-member {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: var(--bg);
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .member-info {
+      flex: 1;
+    }
+
+    .member-name {
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .member-role {
+      font-size: 12px;
+      color: var(--text-light);
+    }
+
+    /* Status Badge */
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .badge.success {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+    }
+
+    .badge.warning {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--warning);
+    }
+
+    .badge.error {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--error);
+    }
+
+    /* Gantt Chart Placeholder */
+    .gantt-container {
+      display: grid;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .gantt-row {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .gantt-label {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .gantt-bar {
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      height: 24px;
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .gantt-bar.completed {
+      background: linear-gradient(90deg, var(--success), var(--success));
+      opacity: 0.6;
+    }
+
+    /* Predictions */
+    .prediction-item {
+      background: var(--bg);
+      border-left: 4px solid var(--primary);
+      padding: 16px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+    }
+
+    .prediction-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .prediction-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 8px 0;
+    }
+
+    .confidence {
+      font-size: 12px;
+      color: var(--text-light);
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--border);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 200px;
+      }
+
+      main {
+        margin-left: 200px;
+        padding: 16px;
+      }
+
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .analytics-container {
+        grid-template-columns: 1fr;
+      }
+
+      .tabs {
+        overflow-x: auto;
+      }
+    }
+
+    /* SVG Icons */
+    svg.icon {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="container" style="max-width: 100%; padding: 0 24px;">
+    <div class="brand">
+      🏗️ ConstructorIA <span style="font-size: 12px; color: var(--text-light); margin-left: 8px;">v2.0</span>
+    </div>
+    <div class="header-right">
+      <a href="./index.html" class="btn btn-secondary" style="margin: 0;">← Volver</a>
+      <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <nav>
+      <a href="#dashboard" class="nav-item active" onclick="switchTab(event, 'dashboard')">
+        <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>
+        Dashboard
+      </a>
+      <a href="#predictions" class="nav-item" onclick="switchTab(event, 'predictions')">
+        <svg class="icon" viewBox="0 0 24 24"><polyline points="3 12 9 18 15 3"></polyline></svg>
+        Predicciones
+      </a>
+      <a href="#timeline" class="nav-item" onclick="switchTab(event, 'timeline')">
+        <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        Timeline
+      </a>
+      <a href="#team" class="nav-item" onclick="switchTab(event, 'team')">
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="7" r="3"></circle><path d="M6 11c-1.5 0-3 .7-3 2v3h12v-3c0-1.3-1.5-2-3-2"></path><circle cx="18" cy="8" r="2"></circle><path d="M16 12c-1 0-2 .5-2 1.5v2.5h8v-2.5c0-1-1-1.5-2-1.5"></path></svg>
+        Equipo
+      </a>
+      <a href="#suppliers" class="nav-item" onclick="switchTab(event, 'suppliers')">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M3 9h18M3 9l1.5-4.5h15l1.5 4.5M3 9v9a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-9"></path></svg>
+        Proveedores
+      </a>
+      <a href="#recommendations" class="nav-item" onclick="switchTab(event, 'recommendations')">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2z"></path><path d="M12 6v6M12 15h.01"></path></svg>
+        Recomendaciones
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="container">
+    <!-- Dashboard Tab -->
+    <div id="dashboard" class="tab-content active">
+      <h1 style="margin-bottom: 24px;">Dashboard de Proyectos</h1>
+
+      <div class="dashboard-grid">
+        <!-- Budget Health -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">💰 Presupuesto Total</span>
+            <span class="badge success">En Control</span>
+          </div>
+          <div class="metric">$45,230</div>
+          <div class="metric-change">+2.1% vs original <span>↑</span></div>
+          <div style="font-size: 13px; color: var(--text-light); margin-top: 8px;">Varianza: +$950</div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">📅 Timeline</span>
+            <span class="badge warning">Atención</span>
+          </div>
+          <div class="metric">14 días</div>
+          <div class="metric-change negative">-2 días de retraso <span>↓</span></div>
+          <div style="font-size: 13px; color: var(--text-light); margin-top: 8px;">Predicción: 16 oct</div>
+        </div>
+
+        <!-- Quality Score -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">⭐ Calidad</span>
+            <span class="badge success">Excelente</span>
+          </div>
+          <div class="metric">94%</div>
+          <div class="metric-change">+3% vs mes anterior <span>↑</span></div>
+          <div style="font-size: 13px; color: var(--text-light); margin-top: 8px;">2 defectos reportados</div>
+        </div>
+
+        <!-- Crew Efficiency -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">👷 Eficiencia Crew</span>
+            <span class="badge success">Normal</span>
+          </div>
+          <div class="metric">23.5 m²/día</div>
+          <div class="metric-change">+5.2% vs baseline <span>↑</span></div>
+          <div style="font-size: 13px; color: var(--text-light); margin-top: 8px;">8 trabajadores activos</div>
+        </div>
+
+        <!-- Suppliers On-Time -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🚚 Proveedores</span>
+            <span class="badge success">100% On-Time</span>
+          </div>
+          <div class="metric">5/5</div>
+          <div class="metric-change">Entrega puntual <span>✓</span></div>
+          <div style="font-size: 13px; color: var(--text-light); margin-top: 8px;">Sin demoras</div>
+        </div>
+
+        <!-- Risk Score -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">⚠️ Riesgo General</span>
+            <span class="badge success">BAJO</span>
+          </div>
+          <div class="metric" style="color: var(--success);">LOW</div>
+          <div class="metric-change" style="color: var(--text-light);">Proyecto bajo control</div>
+          <div style="font-size: 13px; color: var(--text-light); margin-top: 8px;">3% probabilidad retraso</div>
+        </div>
+      </div>
+
+      <!-- Analytics Charts -->
+      <div class="analytics-container">
+        <div class="card">
+          <h3 style="margin-bottom: 16px;">Varianza Presupuestaria</h3>
+          <div class="chart-placeholder">
+            Gráfico de varianza presupuestaria por rubro<br>
+            (Integración Chart.js en producción)
+          </div>
+        </div>
+        <div class="card">
+          <h3 style="margin-bottom: 16px;">Progreso Timeline</h3>
+          <div class="chart-placeholder">
+            Progreso vs Planificado<br>
+            (Integración con datos reales)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Predictions Tab -->
+    <div id="predictions" class="tab-content">
+      <h1 style="margin-bottom: 24px;">Predicciones ML</h1>
+
+      <div class="dashboard-grid">
+        <div class="card">
+          <h3 style="margin-bottom: 16px;">Predicciones Activas</h3>
+          <div class="prediction-item">
+            <div class="prediction-title">📊 Costo Final Estimado</div>
+            <div class="prediction-value">$46,100</div>
+            <div class="confidence">Confianza: 87% | ±5% accuracy</div>
+          </div>
+
+          <div class="prediction-item">
+            <div class="prediction-title">📅 Entrega Estimada</div>
+            <div class="prediction-value">16 de Octubre</div>
+            <div class="confidence">Confianza: 92% | ±3 días</div>
+          </div>
+
+          <div class="prediction-item">
+            <div class="prediction-title">👷 Crew Necesario (Fase 3)</div>
+            <div class="prediction-value">6 personas</div>
+            <div class="confidence">Confianza: 78% | ±10%</div>
+          </div>
+
+          <div class="prediction-item">
+            <div class="prediction-title">⚠️ Riesgo Proveedor</div>
+            <div class="prediction-value" style="color: var(--warning);">MEDIO</div>
+            <div class="confidence">Acero: +3 días en próxima entrega</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-bottom: 16px;">Factores de Predicción</h3>
+          <div style="font-size: 13px; line-height: 1.8;">
+            <div style="padding: 12px; background: var(--bg); margin-bottom: 8px; border-radius: 4px;">
+              <strong>✓ Positivos:</strong><br>
+              • Crew eficiente (+5.2%)<br>
+              • Proveedores puntuales<br>
+              • Clima favorable
+            </div>
+            <div style="padding: 12px; background: var(--bg); margin-bottom: 8px; border-radius: 4px;">
+              <strong>⚠ Riesgos:</strong><br>
+              • Plomería +3% vs presupuesto<br>
+              • Azulejos entrega -2 días<br>
+              • 1 trabajador en permiso
+            </div>
+            <div style="padding: 12px; background: var(--bg); border-radius: 4px;">
+              <strong>→ Acción Recomendada:</strong><br>
+              Adelantar fase 3 en 3 días<br>para mitigar riesgo de acero
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 24px;">
+        <h3 style="margin-bottom: 16px;">Historial de Precisión</h3>
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; font-size: 13px; border-collapse: collapse;">
+            <thead>
+              <tr style="border-bottom: 2px solid var(--border);">
+                <th style="text-align: left; padding: 8px;">Métrica</th>
+                <th style="text-align: center; padding: 8px;">Predicho</th>
+                <th style="text-align: center; padding: 8px;">Real</th>
+                <th style="text-align: center; padding: 8px;">Error</th>
+                <th style="text-align: center; padding: 8px;">Accuracy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid var(--border);">
+                <td style="padding: 8px;">Presupuesto (Proyecto anterior)</td>
+                <td style="text-align: center; padding: 8px;">$35,450</td>
+                <td style="text-align: center; padding: 8px;">$35,620</td>
+                <td style="text-align: center; padding: 8px;">-0.5%</td>
+                <td style="text-align: center; padding: 8px;"><span class="badge success">99.5%</span></td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border);">
+                <td style="padding: 8px;">Timeline (Proyecto anterior)</td>
+                <td style="text-align: center; padding: 8px;">28 días</td>
+                <td style="text-align: center; padding: 8px;">29 días</td>
+                <td style="text-align: center; padding: 8px;">-1 día</td>
+                <td style="text-align: center; padding: 8px;"><span class="badge success">96.6%</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline Tab -->
+    <div id="timeline" class="tab-content">
+      <h1 style="margin-bottom: 24px;">Planificación Timeline (Gantt Chart)</h1>
+
+      <div class="card">
+        <div style="margin-bottom: 24px;">
+          <button class="btn btn-secondary" style="margin-right: 8px;">📥 Importar desde Presupuesto</button>
+          <button class="btn btn-secondary">+ Nueva Fase</button>
+        </div>
+
+        <div class="gantt-container">
+          <div class="gantt-row">
+            <div class="gantt-label">Fase 1: Demolición</div>
+            <div class="gantt-bar completed" style="width: 100%; opacity: 0.5;"></div>
+          </div>
+          <div class="gantt-row">
+            <div class="gantt-label">Fase 2: Estructuras</div>
+            <div class="gantt-bar" style="width: 75%;"></div>
+          </div>
+          <div class="gantt-row">
+            <div class="gantt-label">Fase 3: Plomería</div>
+            <div class="gantt-bar" style="width: 40%;"></div>
+          </div>
+          <div class="gantt-row">
+            <div class="gantt-label">Fase 4: Electricidad</div>
+            <div class="gantt-bar" style="width: 5%;"></div>
+          </div>
+          <div class="gantt-row">
+            <div class="gantt-label">Fase 5: Acabados</div>
+            <div style="color: var(--text-light); font-size: 13px;">No iniciado</div>
+          </div>
+        </div>
+
+        <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border);">
+          <h3 style="margin-bottom: 12px;">Dependencias & Milestones</h3>
+          <div style="font-size: 13px; line-height: 1.8;">
+            <div style="padding: 12px; background: var(--bg); margin-bottom: 8px; border-radius: 4px;">
+              📍 <strong>Hito 1:</strong> Demolición completada ✓ (30 ago)<br>
+              📍 <strong>Hito 2:</strong> Estructuras + Cimientos (14 sep) — EN PROGRESO<br>
+              📍 <strong>Hito 3:</strong> Instalaciones (28 sep) — PREDICHO<br>
+              📍 <strong>Hito 4:</strong> Acabados (16 oct) — PREDICHO
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 24px;">
+        <h3 style="margin-bottom: 16px;">Escenarios de Planificación</h3>
+        <div class="btn-group" style="display: flex; gap: 8px; margin-bottom: 16px;">
+          <button class="btn btn-primary">Escenario Base</button>
+          <button class="btn btn-secondary" onclick="alert('Feature: Simular adelanto de 1 semana')">Adelanto +1 semana</button>
+          <button class="btn btn-secondary" onclick="alert('Feature: Simular retraso +5 días')">Retraso +5 días</button>
+          <button class="btn btn-secondary" onclick="alert('Feature: Simular crew -25%')">Crew -25%</button>
+        </div>
+        <div style="padding: 16px; background: var(--bg); border-radius: 8px; font-size: 13px;">
+          Selecciona un escenario para ver cómo cambiaría la entrega final y costo.
+        </div>
+      </div>
+    </div>
+
+    <!-- Team Tab -->
+    <div id="team" class="tab-content">
+      <h1 style="margin-bottom: 24px;">Colaboración de Equipo</h1>
+
+      <div class="dashboard-grid">
+        <div class="card">
+          <h3 style="margin-bottom: 16px;">Miembros del Equipo</h3>
+          <div class="team-member">
+            <div class="avatar">JG</div>
+            <div class="member-info">
+              <div class="member-name">Juan García</div>
+              <div class="member-role">Project Manager</div>
+            </div>
+            <span class="badge success">Activo</span>
+          </div>
+          <div class="team-member">
+            <div class="avatar" style="background: var(--warning);">MR</div>
+            <div class="member-info">
+              <div class="member-name">María Rodríguez</div>
+              <div class="member-role">Supervisor</div>
+            </div>
+            <span class="badge success">Activo</span>
+          </div>
+          <div class="team-member">
+            <div class="avatar" style="background: var(--success);">CB</div>
+            <div class="member-info">
+              <div class="member-name">Carlos Benítez</div>
+              <div class="member-role">Crew Lead</div>
+            </div>
+            <span class="badge success">En obra</span>
+          </div>
+          <div class="team-member">
+            <div class="avatar" style="background: var(--text-light);">SL</div>
+            <div class="member-info">
+              <div class="member-name">Sofía López</div>
+              <div class="member-role">Crew</div>
+            </div>
+            <span class="badge success">En obra</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-bottom: 16px;">Roles & Permisos</h3>
+          <div style="font-size: 13px; line-height: 1.8;">
+            <div style="padding: 12px; background: var(--bg); margin-bottom: 8px; border-radius: 4px;">
+              <strong>Admin (1)</strong><br>
+              Juan García — Acceso total
+            </div>
+            <div style="padding: 12px; background: var(--bg); margin-bottom: 8px; border-radius: 4px;">
+              <strong>Project Manager (1)</strong><br>
+              María Rodríguez — Crear/editar proyectos
+            </div>
+            <div style="padding: 12px; background: var(--bg); margin-bottom: 8px; border-radius: 4px;">
+              <strong>Supervisor (1)</strong><br>
+              Carlos Benítez — Ver/actualizar estado
+            </div>
+            <div style="padding: 12px; background: var(--bg); border-radius: 4px;">
+              <strong>Crew (1)</strong><br>
+              Sofía López — Tiempo + Fotos + Reportes
+            </div>
+          </div>
+          <button class="btn btn-primary" style="margin-top: 16px; width: 100%;">+ Invitar Miembro</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 24px;">
+        <h3 style="margin-bottom: 16px;">Actividad Reciente</h3>
+        <div style="font-size: 13px;">
+          <div style="padding: 12px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between;">
+            <div><strong>María Rodríguez</strong> actualizó estado Fase 2</div>
+            <div style="color: var(--text-light);">hace 2h</div>
+          </div>
+          <div style="padding: 12px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between;">
+            <div><strong>Carlos Benítez</strong> subió 4 fotos de progreso</div>
+            <div style="color: var(--text-light);">hace 3h</div>
+          </div>
+          <div style="padding: 12px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between;">
+            <div><strong>Juan García</strong> agregó comentario a Plomería</div>
+            <div style="color: var(--text-light);">hace 5h</div>
+          </div>
+          <div style="padding: 12px; display: flex; justify-content: space-between;">
+            <div><strong>Sofía López</strong> completó timesheet (8h)</div>
+            <div style="color: var(--text-light);">ayer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Suppliers Tab -->
+    <div id="suppliers" class="tab-content">
+      <h1 style="margin-bottom: 24px;">Real-time Supplier Sync</h1>
+
+      <div class="dashboard-grid">
+        <div class="card">
+          <h3 style="margin-bottom: 16px;">Proveedores Principales</h3>
+          <div style="font-size: 13px;">
+            <div style="padding: 12px; background: var(--bg); margin-bottom: 8px; border-radius: 4px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong>Ferretería Central</strong>
+                <span class="badge success">100% Score</span>
+              </div>
+              <div style="color: var(--text-light); font-size: 12px; margin-top: 4px;">
+                Entrega: 2-3 días | Última orden: OK ✓
+              </div>
+            </div>
+            <div style="padding: 12px; background: var(--bg); margin-bottom: 8px; border-radius: 4px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong>Acero y Estructuras</strong>
+                <span class="badge warning">85% Score</span>
+              </div>
+              <div style="color: var(--text-light); font-size: 12px; margin-top: 4px;">
+                Entrega: 5-7 días | Próximo: +3 días demora predicha
+              </div>
+            </div>
+            <div style="padding: 12px; background: var(--bg); margin-bottom: 8px; border-radius: 4px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong>Azulejos Premium</strong>
+                <span class="badge success">92% Score</span>
+              </div>
+              <div style="color: var(--text-light); font-size: 12px; margin-top: 4px;">
+                Entrega: 3-4 días | Stock: 500 m² disponible
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-bottom: 16px;">Inventario en Vivo</h3>
+          <div style="font-size: 13px;">
+            <div style="padding: 12px; background: var(--bg); margin-bottom: 8px; border-radius: 4px;">
+              📦 <strong>Tuberías PVC</strong><br>
+              <div style="display: flex; justify-content: space-between; margin-top: 4px;">
+                <span>Stock: 250 m | Precio: $2.50/m</span>
+                <span class="badge success">✓ OK</span>
+              </div>
+            </div>
+            <div style="padding: 12px; background: var(--bg); margin-bottom: 8px; border-radius: 4px;">
+              📦 <strong>Cemento Pórtland</strong><br>
+              <div style="display: flex; justify-content: space-between; margin-top: 4px;">
+                <span>Stock: 40 bolsas | Precio: $8/bolsa</span>
+                <span class="badge warning">⚠ Bajo</span>
+              </div>
+            </div>
+            <div style="padding: 12px; background: var(--bg); border-radius: 4px;">
+              📦 <strong>Ladrillos</strong><br>
+              <div style="display: flex; justify-content: space-between; margin-top: 4px;">
+                <span>Stock: 2000 u | Precio: $0.45/u</span>
+                <span class="badge success">✓ OK</span>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-primary" style="margin-top: 16px; width: 100%;">⚙️ Configurar Niveles Mínimos</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 24px;">
+        <h3 style="margin-bottom: 16px;">Precio Comparativo</h3>
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; font-size: 13px; border-collapse: collapse;">
+            <thead>
+              <tr style="border-bottom: 2px solid var(--border);">
+                <th style="text-align: left; padding: 8px;">Material</th>
+                <th style="text-align: center; padding: 8px;">Ferretería Central</th>
+                <th style="text-align: center; padding: 8px;">Distribuidor Z</th>
+                <th style="text-align: center; padding: 8px;">Mejor Precio</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid var(--border);">
+                <td style="padding: 8px;">Tuberías PVC (1m)</td>
+                <td style="text-align: center; padding: 8px;">$2.50</td>
+                <td style="text-align: center; padding: 8px;">$2.35</td>
+                <td style="text-align: center; padding: 8px;"><span class="badge success">Dist. Z -6%</span></td>
+              </tr>
+              <tr>
+                <td style="padding: 8px;">Cemento Pórtland (bolsa)</td>
+                <td style="text-align: center; padding: 8px;">$8.00</td>
+                <td style="text-align: center; padding: 8px;">$8.20</td>
+                <td style="text-align: center; padding: 8px;"><span class="badge success">Central +2.5%</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recommendations Tab -->
+    <div id="recommendations" class="tab-content">
+      <h1 style="margin-bottom: 24px;">AI Recommendations Engine</h1>
+
+      <div class="dashboard-grid">
+        <div class="card" style="grid-column: 1 / -1; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; border: none;">
+          <h2 style="margin-bottom: 12px;">💡 Oportunidades de Optimización</h2>
+          <p style="opacity: 0.95; margin-bottom: 0;">ConstructorIA encontró 3 formas de mejorar este proyecto sin comprometer calidad.</p>
+        </div>
+
+        <div class="card">
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div style="font-size: 24px; flex-shrink: 0;">💰</div>
+            <div style="flex: 1;">
+              <h3 style="margin-bottom: 8px;">Reducción de Costos: $1,850</h3>
+              <p style="font-size: 13px; color: var(--text-light); margin-bottom: 12px;">Cambiar marca de azulejos por alternativa de igual especificación.</p>
+              <div style="padding: 12px; background: var(--bg); border-radius: 4px; font-size: 13px; margin-bottom: 12px;">
+                <strong>Opción:</strong> Premium Tiles → FastTile Pro (mismos m², color)<br>
+                <strong>Ahorros:</strong> $1,850 (-4.1%)<br>
+                <strong>Impacto:</strong> Ninguno en calidad final
+              </div>
+              <button class="btn btn-primary">✓ Aceptar</button>
+              <button class="btn btn-secondary">Más Info</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div style="font-size: 24px; flex-shrink: 0;">⏱️</div>
+            <div style="flex: 1;">
+              <h3 style="margin-bottom: 8px;">Acelerar Entrega: -4 días</h3>
+              <p style="font-size: 13px; color: var(--text-light); margin-bottom: 12px;">Paralelizar Fase 3 (plomería) con Fase 2 (estructuras).</p>
+              <div style="padding: 12px; background: var(--bg); border-radius: 4px; font-size: 13px; margin-bottom: 12px;">
+                <strong>Cambio:</strong> Secuencial → Paralelo<br>
+                <strong>Nueva fecha:</strong> 12 octubre (vs 16 actual)<br>
+                <strong>Costo adicional:</strong> $600 (supervisión extra)
+              </div>
+              <button class="btn btn-primary">✓ Aceptar</button>
+              <button class="btn btn-secondary">Más Info</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div style="font-size: 24px; flex-shrink: 0;">👷</div>
+            <div style="flex: 1;">
+              <h3 style="margin-bottom: 8px;">Optimizar Crew: +$1,200 eficiencia</h3>
+              <p style="font-size: 13px; color: var(--text-light); margin-bottom: 12px;">Agregar especialista en plomería 3 días en Fase 3.</p>
+              <div style="padding: 12px; background: var(--bg); border-radius: 4px; font-size: 13px; margin-bottom: 12px;">
+                <strong>Acción:</strong> +1 plomero especializado (3 días)<br>
+                <strong>Costo:</strong> $400<br>
+                <strong>ROI:</strong> $1,200 en ahorros por mejor flujo
+              </div>
+              <button class="btn btn-primary">✓ Aceptar</button>
+              <button class="btn btn-secondary">Más Info</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 24px;">
+        <h3 style="margin-bottom: 16px;">Historial de Recomendaciones</h3>
+        <div style="font-size: 13px;">
+          <div style="padding: 12px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between;">
+            <div><strong>Cambiar Azulejos</strong> — Ahorrar $2,100</div>
+            <div style="color: var(--text-light);">Aceptado 5 sep</div>
+          </div>
+          <div style="padding: 12px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between;">
+            <div><strong>Agregar Pintor</strong> — Acelerar 2 días</div>
+            <div style="color: var(--text-light);">Rechazado 2 sep</div>
+          </div>
+          <div style="padding: 12px; display: flex; justify-content: space-between;">
+            <div><strong>Negociar con Proveedor A</strong> — Descuento 5%</div>
+            <div style="color: var(--text-light);">Pendiente</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function switchTab(e, tabName) {
+      e.preventDefault();
+
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
+      // Show selected tab
+      document.getElementById(tabName).classList.add('active');
+      e.target.closest('.nav-item').classList.add('active');
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    }
+
+    // Load theme from localStorage
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+</body>
+</html>

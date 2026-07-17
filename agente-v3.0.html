@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ConstructorIA v3.0 — AI Construction Ecosystem</title>
+  <meta name="description" content="ConstructorIA v3.0: Ecosystem completo de IA para construcción. Marketplace, integrations, ecosystem partners.">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #C87D2F;
+      --primary-light: #D89A4D;
+      --primary-dark: #A0621E;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --error: #EF4444;
+      --text: #1A1A1A;
+      --text-light: #666666;
+      --border: #E5E7EB;
+      --surface: #FFFFFF;
+      --bg: #F9FAFB;
+    }
+
+    [data-theme="dark"] {
+      --text: #FFFFFF;
+      --text-light: #CCCCCC;
+      --border: #333333;
+      --surface: #1F1F1F;
+      --bg: #121212;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .header-right {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    main {
+      padding: 40px 0;
+    }
+
+    h1 {
+      font-size: clamp(28px, 6vw, 48px);
+      margin-bottom: 16px;
+    }
+
+    h2 {
+      font-size: 28px;
+      margin: 32px 0 16px;
+    }
+
+    h3 {
+      font-size: 18px;
+      margin: 20px 0 12px;
+      color: var(--primary);
+    }
+
+    .subtitle {
+      font-size: 18px;
+      color: var(--text-light);
+      margin-bottom: 32px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin: 24px 0;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s;
+    }
+
+    .card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .card-icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-weight: 600;
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .card-desc {
+      font-size: 14px;
+      color: var(--text-light);
+      margin-bottom: 12px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .badge-new {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+    }
+
+    .badge-beta {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--warning);
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--border);
+    }
+
+    .feature-list {
+      list-style: none;
+      margin: 16px 0;
+    }
+
+    .feature-list li {
+      padding: 8px 0;
+      padding-left: 24px;
+      position: relative;
+    }
+
+    .feature-list li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    .section {
+      margin: 60px 0;
+      padding: 40px;
+      background: var(--surface);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .section.featured {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      border: none;
+    }
+
+    .section.featured h2 {
+      color: white;
+    }
+
+    .section.featured .card {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+
+    .section.featured .card-title {
+      color: white;
+    }
+
+    .section.featured .card-desc {
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .stat {
+      text-align: center;
+      padding: 20px;
+      background: var(--bg);
+      border-radius: 8px;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-light);
+      margin-top: 8px;
+    }
+
+    .timeline {
+      position: relative;
+      padding: 20px 0;
+    }
+
+    .timeline-item {
+      padding: 20px;
+      margin-bottom: 20px;
+      background: var(--bg);
+      border-left: 4px solid var(--primary);
+      border-radius: 4px;
+    }
+
+    .timeline-item.completed {
+      border-left-color: var(--success);
+    }
+
+    .timeline-date {
+      font-weight: 600;
+      color: var(--primary);
+      font-size: 13px;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 28px;
+      }
+
+      .section {
+        padding: 24px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="container" style="max-width: 100%; padding: 0 24px;">
+    <div class="brand">
+      🏗️ ConstructorIA <span style="font-size: 12px; color: var(--text-light); margin-left: 8px;">v3.0</span>
+    </div>
+    <div class="header-right">
+      <a href="./index.html" class="btn btn-secondary" style="margin: 0;">← Volver</a>
+      <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Hero -->
+    <section style="text-align: center; margin: 60px 0;">
+      <h1>🚀 ConstructorIA v3.0</h1>
+      <p class="subtitle">Ecosystem de IA para la Industria de Construcción</p>
+      <p style="font-size: 16px; color: var(--text-light); max-width: 600px; margin: 0 auto 24px;">
+        Plataforma integrada con 50+ partners, automatización completa de flujos, marketplace de servicios y analytics predictivo avanzado.
+      </p>
+      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <button class="btn btn-primary" onclick="scrollTo('#features')">Explorar Features</button>
+        <button class="btn btn-secondary" onclick="alert('Coming 2028')">Solicitar Acceso</button>
+      </div>
+    </section>
+
+    <!-- Key Metrics -->
+    <section class="stats">
+      <div class="stat">
+        <div class="stat-value">50+</div>
+        <div class="stat-label">Integraciones</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">$5M+</div>
+        <div class="stat-label">ARR Target</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">10k+</div>
+        <div class="stat-label">Usuarios</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">95%</div>
+        <div class="stat-label">Automatización</div>
+      </div>
+    </section>
+
+    <!-- Core Features -->
+    <section id="features" class="section">
+      <h2>✨ Características Principales v3.0</h2>
+
+      <div class="grid">
+        <div class="card">
+          <div class="card-icon">🤝</div>
+          <div class="badge badge-new">NUEVO</div>
+          <div class="card-title">Ecosystem Marketplace</div>
+          <div class="card-desc">
+            50+ partners integrados. Contrata servicios, materiales, equipo y crews directamente desde la plataforma.
+          </div>
+          <ul class="feature-list">
+            <li>Subcontratistas verificados</li>
+            <li>Materiales con stock real-time</li>
+            <li>Seguros + garantías</li>
+            <li>Pagos integrados</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🔗</div>
+          <div class="badge badge-new">NUEVO</div>
+          <div class="card-title">Partner Integrations</div>
+          <div class="card-desc">
+            ERP, CRM, Finanzas, HR — datos sincronizados en tiempo real.
+          </div>
+          <ul class="feature-list">
+            <li>QuickBooks / Xero</li>
+            <li>SAP / Oracle</li>
+            <li>Google Workspace</li>
+            <li>Slack / Teams</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">📊</div>
+          <div class="badge badge-beta">MEJORADO</div>
+          <div class="card-title">Enterprise Analytics</div>
+          <div class="card-desc">
+            BI avanzado: predicciones multi-proyecto, benchmarking, reportes ejecutivos.
+          </div>
+          <ul class="feature-list">
+            <li>Portfolio analytics</li>
+            <li>Benchmarking vs industria</li>
+            <li>Predicciones 12+ meses</li>
+            <li>Custom dashboards</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🤖</div>
+          <div class="badge badge-beta">MEJORADO</div>
+          <div class="card-title">Autonomous Workflows</div>
+          <div class="card-desc">
+            Automatización end-to-end: órdenes de compra, nómina, reportes, alertas.
+          </div>
+          <ul class="feature-list">
+            <li>Auto-generate POs</li>
+            <li>Reorder automático</li>
+            <li>Payroll sync</li>
+            <li>Scheduled reports</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🌍</div>
+          <div class="badge badge-new">NUEVO</div>
+          <div class="card-title">Global Expansion</div>
+          <div class="card-desc">
+            Multi-país, multi-moneda, cumplimiento local. Operar en 50+ países.
+          </div>
+          <ul class="feature-list">
+            <li>Multi-currency</li>
+            <li>Tax compliance</li>
+            <li>Local partners</li>
+            <li>Regional pricing</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🎓</div>
+          <div class="badge badge-new">NUEVO</div>
+          <div class="card-title">Academy & Certifications</div>
+          <div class="card-desc">
+            Plataforma educativa: capacitación, certificaciones, marketplace de expertos.
+          </div>
+          <ul class="feature-list">
+            <li>Cursos on-demand</li>
+            <li>Certificaciones</li>
+            <li>Expertos marketplace</li>
+            <li>Mentoring</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Marketplace Section -->
+    <section class="section featured">
+      <h2>🏪 Marketplace de Servicios</h2>
+      <p style="font-size: 16px; margin-bottom: 24px;">
+        Catálogo integrado de 5,000+ servicios, 2,000+ proveedores, verificados y seguros.
+      </p>
+
+      <div class="grid">
+        <div class="card">
+          <div class="card-icon">🏗️</div>
+          <div class="card-title">Servicios de Construcción</div>
+          <p class="card-desc">Subcontratistas, crews, supervisores, expertos de obra.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">📦</div>
+          <div class="card-title">Materiales & Suministros</div>
+          <p class="card-desc">Agregados, acero, cemento, acabados — 100+ proveedores.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🔧</div>
+          <div class="card-title">Equipamiento</div>
+          <p class="card-desc">Herramientas, maquinaria, andamios — alquiler y compra.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🚚</div>
+          <div class="card-title">Logística</div>
+          <p class="card-desc">Transporte, almacenamiento, entregas en 24-48h.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">✅</div>
+          <div class="card-title">Inspecciones & Garantías</div>
+          <p class="card-desc">Auditorías, certificaciones, seguros de obra.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">💰</div>
+          <div class="card-title">Finanzas & Seguros</div>
+          <p class="card-desc">Créditos, seguros, garantías de inversión.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Integrations -->
+    <section class="section">
+      <h2>🔗 50+ Integraciones</h2>
+
+      <div style="margin: 24px 0;">
+        <h3>Categorías Principales</h3>
+        <div class="grid">
+          <div class="card">
+            <strong>ERP & Contabilidad</strong>
+            <p style="font-size: 13px; color: var(--text-light); margin-top: 8px;">
+              QuickBooks, Xero, SAP, Oracle, NetSuite, Zoho
+            </p>
+          </div>
+          <div class="card">
+            <strong>CRM & Sales</strong>
+            <p style="font-size: 13px; color: var(--text-light); margin-top: 8px;">
+              Salesforce, HubSpot, Pipedrive, Monday.com, Asana
+            </p>
+          </div>
+          <div class="card">
+            <strong>HR & Nómina</strong>
+            <p style="font-size: 13px; color: var(--text-light); margin-top: 8px;">
+              Guidepoint, Rippling, Justworks, ADP, BambooHR
+            </p>
+          </div>
+          <div class="card">
+            <strong>Comunicación</strong>
+            <p style="font-size: 13px; color: var(--text-light); margin-top: 8px;">
+              Slack, Teams, Zoom, SendGrid, Twilio, WhatsApp
+            </p>
+          </div>
+          <div class="card">
+            <strong>Storage & Documentos</strong>
+            <p style="font-size: 13px; color: var(--text-light); margin-top: 8px;">
+              Google Drive, OneDrive, Dropbox, Box, Notion
+            </p>
+          </div>
+          <div class="card">
+            <strong>Pagos & Finanzas</strong>
+            <p style="font-size: 13px; color: var(--text-light); margin-top: 8px;">
+              Stripe, PayPal, Square, MercadoPago, Wise
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Roadmap v3.0+ -->
+    <section class="section">
+      <h2>📅 Timeline v3.0 → Beyond</h2>
+
+      <div class="timeline">
+        <div class="timeline-item completed">
+          <div class="timeline-date">✓ March 2028</div>
+          <h3 style="margin-top: 0;">v3.0: Core Ecosystem Launch</h3>
+          <p>Marketplace, 50 partners, enterprise analytics, autonomous workflows.</p>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">Q2 2028</div>
+          <h3 style="margin-top: 0;">v3.1: Global Expansion</h3>
+          <p>Multi-país, multi-moneda, cumplimiento local. +30 países.</p>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">Q3 2028</div>
+          <h3 style="margin-top: 0;">v3.2: Academy & Certifications</h3>
+          <p>Plataforma educativa, cursos, marketplace de expertos.</p>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">Q4 2028</div>
+          <h3 style="margin-top: 0;">v3.3: Advanced AI</h3>
+          <p>Predicciones con vision (drones), NLP para documentos, auto-reporting.</p>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">2029+</div>
+          <h3 style="margin-top: 0;">Expansión & Nuevas Verticales</h3>
+          <p>Real estate, facilities management, infrastructure. $50M+ ARR.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Business Model -->
+    <section class="section">
+      <h2>💰 Modelo de Negocio v3.0</h2>
+
+      <div class="grid">
+        <div class="card">
+          <h3 style="margin-top: 0;">SaaS Subscriptions</h3>
+          <p>$200-2,000/mes por usuario + team</p>
+          <ul class="feature-list">
+            <li>Starter: $200/mes</li>
+            <li>Professional: $500/mes</li>
+            <li>Enterprise: Custom</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-top: 0;">Marketplace Commission</h3>
+          <p>3-8% de transacciones</p>
+          <ul class="feature-list">
+            <li>Servicios: 8%</li>
+            <li>Materiales: 3%</li>
+            <li>Equipamiento: 5%</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-top: 0;">Partner Revenue</h3>
+          <p>Comisión de integraciones partner</p>
+          <ul class="feature-list">
+            <li>Referrals: 20% lifetime</li>
+            <li>API usage: Tier pricing</li>
+            <li>White-label: Revenue share</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-top: 0;">Services & Consulting</h3>
+          <p>Implementación, training, custom dev</p>
+          <ul class="feature-list">
+            <li>Implementation: $5-50k</li>
+            <li>Training: $2-10k</li>
+            <li>Custom dev: Hourly</li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="margin-top: 24px; padding: 20px; background: var(--bg); border-radius: 8px;">
+        <h3 style="margin-top: 0;">Proyecciones Financieras</h3>
+        <div class="grid" style="margin-top: 16px;">
+          <div>
+            <strong>v3.0 (2028)</strong>
+            <p style="font-size: 13px; color: var(--text-light); margin-top: 4px;">$1.5M MRR</p>
+          </div>
+          <div>
+            <strong>v3.2 (2028)</strong>
+            <p style="font-size: 13px; color: var(--text-light); margin-top: 4px;">$3M MRR</p>
+          </div>
+          <div>
+            <strong>2029</strong>
+            <p style="font-size: 13px; color: var(--text-light); margin-top: 4px;">$10M+ MRR</p>
+          </div>
+          <div>
+            <strong>2030+</strong>
+            <p style="font-size: 13px; color: var(--text-light); margin-top: 4px;">$50M+ ARR</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section style="text-align: center; margin: 60px 0;">
+      <h2>🚀 Ready for v3.0?</h2>
+      <p class="subtitle">Ecosystem completo de IA para construcción</p>
+      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <button class="btn btn-primary" onclick="alert('Acceso beta en 2028')">Solicitar Acceso Beta</button>
+        <a href="./index.html" class="btn btn-secondary">← Volver a Inicio</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    }
+
+    function scrollTo(selector) {
+      document.querySelector(selector).scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Load theme from localStorage
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+</body>
+</html>

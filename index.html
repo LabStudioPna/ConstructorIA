@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ConstructorIA — Presupuestos con IA | MVP v0.1</title>
+  <meta name="description" content="ConstructorIA: Presupuestos de obra, control de costos, análisis con IA. v0.1 MVP + v1.0-v3.0 Roadmap.">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #C87D2F;
+      --primary-light: #D89A4D;
+      --primary-dark: #A0621E;
+      --text: #1A1A1A;
+      --text-light: #666;
+      --border: #E5E7EB;
+      --surface: #FFF;
+      --bg: #F9FAFB;
+    }
+    [data-theme="dark"] {
+      --text: #FFF;
+      --text-light: #CCC;
+      --border: #333;
+      --surface: #1F1F1F;
+      --bg: #121212;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+    }
+    .header-right { display: flex; gap: 16px; align-items: center; }
+    .theme-toggle { background: none; border: none; font-size: 20px; cursor: pointer; }
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.2s;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-secondary { background: var(--bg); color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { background: var(--border); }
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 80px 20px;
+      text-align: center;
+      margin-top: 60px;
+    }
+    .hero h1 { font-size: clamp(32px, 8vw, 56px); margin-bottom: 16px; }
+    .hero p { font-size: 18px; margin-bottom: 32px; opacity: 0.95; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; margin: 60px 0; }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      text-align: center;
+    }
+    .card span { font-size: 48px; display: block; margin-bottom: 12px; }
+    .card h3 { margin-bottom: 12px; }
+    .card p { color: var(--text-light); font-size: 14px; }
+    .btn-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .version-badge { background: var(--border); color: var(--text); padding: 20px; border-radius: 8px; margin: 40px 0; text-align: center; }
+    footer { text-align: center; padding: 40px 20px; color: var(--text-light); border-top: 1px solid var(--border); margin-top: 60px; }
+  </style>
+</head>
+<body>
+  <header class="container" style="max-width: 100%; padding: 0 20px;">
+    <a href="./" class="brand">🏗️ ConstructorIA</a>
+    <div class="header-right">
+      <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>ConstructorIA</h1>
+      <p>Presupuestos de obra inteligentes con IA</p>
+      <div class="btn-group">
+        <a href="./agente-v1.0.html" class="btn btn-primary">Abrir App →</a>
+        <a href="./roadmap.html" class="btn btn-secondary">Ver Roadmap</a>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <span>💰</span>
+        <h3>Presupuestos en Minutos</h3>
+        <p>Genera cotizaciones profesionales automáticamente</p>
+      </div>
+      <div class="card">
+        <span>🤖</span>
+        <h3>Chat Inteligente</h3>
+        <p>Asistente IA para análisis y recomendaciones</p>
+      </div>
+      <div class="card">
+        <span>📊</span>
+        <h3>Control de Costos</h3>
+        <p>Seguimiento real-time de desviaciones</p>
+      </div>
+      <div class="card">
+        <span>📱</span>
+        <h3>100% Responsive</h3>
+        <p>Funciona en cualquier dispositivo</p>
+      </div>
+    </section>
+
+    <div class="version-badge">
+      <h2 style="margin-bottom: 8px;">Versiones Disponibles</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; margin-top: 16px;">
+        <a href="./agente.html" class="btn btn-secondary">v0.1 MVP</a>
+        <a href="./agente-v1.0.html" class="btn btn-secondary">v1.0 Prod</a>
+        <a href="./agente-v2.0.html" class="btn btn-secondary">v2.0 Analytics</a>
+        <a href="./agente-v3.0.html" class="btn btn-secondary">v3.0 Ecosystem</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>ConstructorIA © 2026 | LABStudio</p>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    }
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+</body>
+</html>
