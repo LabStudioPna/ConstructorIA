@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ConstructorIA Launch Tracker</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #C87D2F;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --text: #1A1A1A;
+      --border: #E5E7EB;
+      --bg: #F9FAFB;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 20px;
+    }
+    .container { max-width: 1000px; margin: 0 auto; }
+    header { text-align: center; margin-bottom: 40px; }
+    h1 { font-size: 28px; color: var(--primary); margin-bottom: 10px; }
+    .progress-bar {
+      width: 100%;
+      height: 12px;
+      background: var(--border);
+      border-radius: 6px;
+      margin: 20px 0;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--success));
+      width: 70%;
+      transition: width 0.3s;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .stat {
+      background: white;
+      border: 1px solid var(--border);
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .stat-label {
+      font-size: 12px;
+      color: var(--text);
+      margin-top: 8px;
+      text-transform: uppercase;
+    }
+    .section {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 24px;
+      padding: 24px;
+    }
+    .section-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--primary);
+    }
+    .checklist { list-style: none; }
+    .checklist-item {
+      padding: 12px;
+      margin-bottom: 8px;
+      background: var(--bg);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .checklist-item:hover { background: #f0f0f0; }
+    .checklist-item input {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+    .checklist-item.completed {
+      opacity: 0.6;
+      text-decoration: line-through;
+    }
+    .checklist-item.completed input:checked {
+      accent-color: var(--success);
+    }
+    .timeline {
+      border-left: 3px solid var(--primary);
+      padding-left: 20px;
+    }
+    .timeline-item {
+      margin-bottom: 24px;
+      position: relative;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -30px;
+      top: 0;
+      width: 12px;
+      height: 12px;
+      background: var(--primary);
+      border-radius: 50%;
+      border: 3px solid white;
+    }
+    .timeline-item.completed::before {
+      background: var(--success);
+    }
+    .timeline-date {
+      font-weight: 600;
+      color: var(--primary);
+      font-size: 14px;
+    }
+    .timeline-content {
+      margin-top: 4px;
+      font-size: 14px;
+      color: var(--text);
+    }
+    .btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      margin-top: 20px;
+    }
+    .btn:hover { background: #A0621E; }
+    .export-data {
+      font-size: 12px;
+      color: #666;
+      margin-top: 20px;
+      padding: 12px;
+      background: #f0f0f0;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🚀 ConstructorIA v1.0 Launch Tracker</h1>
+      <p>Target: October 15, 2026 | Progress: 70% Complete</p>
+      <div class="progress-bar">
+        <div class="progress-fill"></div>
+      </div>
+    </header>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-value">22</div>
+        <div class="stat-label">Tasks Done</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">9</div>
+        <div class="stat-label">In Progress</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">5</div>
+        <div class="stat-label">To Do</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">70%</div>
+        <div class="stat-label">Complete</div>
+      </div>
+    </div>
+
+    <!-- Infrastructure -->
+    <div class="section">
+      <div class="section-title">🏗️ Infrastructure (Tech)</div>
+      <ul class="checklist">
+        <li class="checklist-item completed"><input type="checkbox" checked> Server.js API completa</li>
+        <li class="checklist-item completed"><input type="checkbox" checked> PostgreSQL schema</li>
+        <li class="checklist-item completed"><input type="checkbox" checked> JWT authentication</li>
+        <li class="checklist-item"><input type="checkbox"> Rate limiting</li>
+        <li class="checklist-item"><input type="checkbox"> Database backups automated</li>
+        <li class="checklist-item"><input type="checkbox"> Load testing</li>
+        <li class="checklist-item"><input type="checkbox"> Security audit</li>
+        <li class="checklist-item completed"><input type="checkbox" checked> Frontend complete</li>
+        <li class="checklist-item"><input type="checkbox"> Lighthouse score >90</li>
+        <li class="checklist-item"><input type="checkbox"> AWS deployment tested</li>
+      </ul>
+    </div>
+
+    <!-- Security -->
+    <div class="section">
+      <div class="section-title">🔐 Security & Compliance</div>
+      <ul class="checklist">
+        <li class="checklist-item"><input type="checkbox"> GDPR compliance</li>
+        <li class="checklist-item"><input type="checkbox"> Data encryption at rest</li>
+        <li class="checklist-item"><input type="checkbox"> SSL/TLS on endpoints</li>
+        <li class="checklist-item"><input type="checkbox"> SQL injection testing</li>
+        <li class="checklist-item"><input type="checkbox"> Email verification</li>
+        <li class="checklist-item"><input type="checkbox"> 2FA option</li>
+      </ul>
+    </div>
+
+    <!-- Features -->
+    <div class="section">
+      <div class="section-title">📱 Features v1.0 (Core)</div>
+      <ul class="checklist">
+        <li class="checklist-item completed"><input type="checkbox" checked> Register endpoint</li>
+        <li class="checklist-item completed"><input type="checkbox" checked> Login endpoint</li>
+        <li class="checklist-item completed"><input type="checkbox" checked> JWT tokens</li>
+        <li class="checklist-item"><input type="checkbox"> Password reset</li>
+        <li class="checklist-item completed"><input type="checkbox" checked> Create project</li>
+        <li class="checklist-item completed"><input type="checkbox" checked> Budget items</li>
+        <li class="checklist-item"><input type="checkbox"> PDF export</li>
+        <li class="checklist-item"><input type="checkbox"> CSV export</li>
+        <li class="checklist-item"><input type="checkbox"> Project sharing</li>
+      </ul>
+    </div>
+
+    <!-- Marketing -->
+    <div class="section">
+      <div class="section-title">📢 Marketing & Launch</div>
+      <ul class="checklist">
+        <li class="checklist-item completed"><input type="checkbox" checked> Landing page</li>
+        <li class="checklist-item completed"><input type="checkbox" checked> Email templates</li>
+        <li class="checklist-item"><input type="checkbox"> Social media content (20 posts)</li>
+        <li class="checklist-item"><input type="checkbox"> Press release</li>
+        <li class="checklist-item"><input type="checkbox"> Blog post</li>
+        <li class="checklist-item"><input type="checkbox"> Video demo</li>
+        <li class="checklist-item"><input type="checkbox"> PR outreach</li>
+        <li class="checklist-item"><input type="checkbox"> Analytics setup</li>
+      </ul>
+    </div>
+
+    <!-- Timeline -->
+    <div class="section">
+      <div class="section-title">📅 Launch Timeline</div>
+      <div class="timeline">
+        <div class="timeline-item completed">
+          <div class="timeline-date">September 1-30</div>
+          <div class="timeline-content">Beta testing & feedback collection</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">October 1-7</div>
+          <div class="timeline-content">Awareness phase: Email + social teaser</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">October 15</div>
+          <div class="timeline-content">🚀 LAUNCH DAY - v1.0 goes live</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">October 15-31</div>
+          <div class="timeline-content">Engagement phase: Customer acquisition</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">November 1</div>
+          <div class="timeline-content">Post-launch analysis & v2.0 planning</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Goals -->
+    <div class="section">
+      <div class="section-title">🎯 Launch Goals (October 31)</div>
+      <div style="display: grid; gap: 12px;">
+        <div style="padding: 12px; background: var(--bg); border-radius: 6px;">
+          <strong>Signups:</strong> 500 ✅
+        </div>
+        <div style="padding: 12px; background: var(--bg); border-radius: 6px;">
+          <strong>Active Users (DAU):</strong> 100 ✅
+        </div>
+        <div style="padding: 12px; background: var(--bg); border-radius: 6px;">
+          <strong>Paid Conversions:</strong> 50 users
+        </div>
+        <div style="padding: 12px; background: var(--bg); border-radius: 6px;">
+          <strong>MRR Target:</strong> $1,300+
+        </div>
+        <div style="padding: 12px; background: var(--bg); border-radius: 6px;">
+          <strong>Uptime:</strong> 99%+ ✅
+        </div>
+      </div>
+    </div>
+
+    <button class="btn" onclick="exportData()">📥 Export as JSON</button>
+    <div class="export-data" id="export" style="display: none;"></div>
+  </div>
+
+  <script>
+    // Auto-save to localStorage
+    document.querySelectorAll('input[type="checkbox"]').forEach(box => {
+      box.addEventListener('change', () => {
+        localStorage.setItem('launchChecklist', JSON.stringify(
+          Array.from(document.querySelectorAll('input[type="checkbox"]')).map(b => b.checked)
+        ));
+        updateStats();
+      });
+    });
+
+    // Load saved data
+    const saved = localStorage.getItem('launchChecklist');
+    if (saved) {
+      const checks = JSON.parse(saved);
+      document.querySelectorAll('input[type="checkbox"]').forEach((b, i) => {
+        b.checked = checks[i];
+        if (checks[i]) b.parentElement.classList.add('completed');
+      });
+    }
+
+    function updateStats() {
+      const total = document.querySelectorAll('input[type="checkbox"]').length;
+      const checked = document.querySelectorAll('input[type="checkbox"]:checked').length;
+      const percent = Math.round((checked / total) * 100);
+      document.querySelector('.progress-fill').style.width = percent + '%';
+      document.querySelectorAll('.stat-value')[3].textContent = percent + '%';
+    }
+
+    function exportData() {
+      const data = {
+        date: new Date().toISOString(),
+        progress: document.querySelector('.progress-fill').style.width,
+        tasks: Array.from(document.querySelectorAll('.checklist-item')).map((el, i) => ({
+          task: el.textContent.trim(),
+          completed: el.querySelector('input').checked
+        }))
+      };
+      document.getElementById('export').textContent = JSON.stringify(data, null, 2);
+      document.getElementById('export').style.display = 'block';
+    }
+
+    updateStats();
+  </script>
+</body>
+</html>
