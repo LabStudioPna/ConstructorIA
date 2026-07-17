@@ -1,0 +1,16 @@
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="256" y2="256" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3E6A96"/>
+      <stop offset="1" stop-color="#12253D"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="56" fill="url(#bg)"/>
+  <!-- house pictogram -->
+  <path d="M128 58 L196 112 V196 C196 200.4 192.4 204 188 204 H68 C63.6 204 60 200.4 60 196 V112 Z"
+        fill="#F8F9FA"/>
+  <path d="M46 120 L128 54 L210 120" stroke="#F8F9FA" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <rect x="110" y="146" width="36" height="58" rx="4" fill="#1E3A5F"/>
+  <!-- AI spark accent -->
+  <path d="M178 84 L186 100 L202 108 L186 116 L178 132 L170 116 L154 108 L170 100 Z" fill="#B85C38"/>
+</svg>
