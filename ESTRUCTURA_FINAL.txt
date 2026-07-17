@@ -1,0 +1,122 @@
+╔═══════════════════════════════════════════════════════════════════╗
+║          ConstructorIA v1.0 — ESTRUCTURA FINAL DE GITHUB          ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+📁 ROOT DIRECTORY - Todos estos archivos van en la raíz de GitHub:
+
+🎯 FRONTEND (HTML)
+├── index.html                    Landing page (hero + pricing + CTA)
+├── agente-constructor.html       Aplicación única (5 módulos integrados)
+└── guia-completa.html            Documentación centralizada
+
+⚙️ BACKEND (Node.js + Express)
+├── server.js                     API Express (15+ endpoints JWT auth)
+├── package.json                  Dependencies (express, pg, bcryptjs, jwt)
+└── database-schema.sql           Schema PostgreSQL (10 tablas)
+
+🤖 INTEGRACIONES & MÓDULOS
+├── analyze-plan.js               Claude Vision (análisis de planos)
+├── ml-predictor.js               ML predictions (costo ±5%, timeline ±3d)
+├── renderers.js                  Midjourney 3D render generation
+├── vision-photo.js               Photo analysis (progress tracking)
+└── suppliers-integration.js       Real-time price comparison (5 proveedores)
+
+📋 DOCUMENTACIÓN
+├── DEPLOYMENT_GUIDE.md           Cómo deployar en AWS/Docker
+├── V1.0_LAUNCH_CHECKLIST.md      70-punto checklist pre-lanzamiento
+├── MARKETING_LAUNCH_PLAN.md      Plan marketing Oct 2026
+├── EMAIL_TEMPLATES_BETA.md       Email templates (6 variantes)
+├── ENGINEERING_SPECS_v1.0.md     Tech specs completas
+├── n8n-workflows.md              Automatización (10 workflows)
+└── README.md                      Quick start guide
+
+🐳 DEVOPS
+├── docker-compose.yml            PostgreSQL + Node API
+├── Dockerfile                    Container image
+└── .env.example                  Environment variables template
+
+---
+
+✅ ARCHIVOS CORRECTOS A USAR:
+
+Frontend:
+  - index.html → FiscoIA/MiPropIA style landing page
+  - agente-constructor.html → App única con 5 módulos (Chat, Planos, Renders, Predicciones, Proveedores)
+  - guia-completa.html → Documentación completa centralizada
+
+Backend:
+  - server.js → API con endpoints /auth, /projects, /items, /predictions, /suppliers
+  - package.json → npm install antes de npm start
+  - database-schema.sql → Run en PostgreSQL antes de iniciar
+
+Integraciones:
+  - Todos los .js files → Modules que se importan en server.js o agente-constructor.html
+  - Están listos para producción con manejo de errores y logging
+
+Documentación:
+  - Todas las .md files → Referencia completa para desarrolladores y usuarios
+
+---
+
+❌ ARCHIVOS VIEJOS A IGNORAR (no subir a GitHub):
+
+agente-v1.0.html     ← OLD (borrar)
+agente-v2.0.html     ← OLD (borrar)
+agente-v3.0.html     ← OLD (borrar)
+agente.html          ← OLD (borrar)
+v1.0_RELEASE_NOTES.md ← OLD (borrar)
+v2.0_RELEASE_NOTES.md ← OLD (borrar)
+v3.0_RELEASE_NOTES.md ← OLD (borrar)
+SPECS_v2.0_*.md      ← OLD (borrar)
+SPECS_v3.0_*.md      ← OLD (borrar)
+IMPLEMENTATION_ROADMAP.md ← OLD (borrar)
+ICON-SYSTEM.md       ← OLD (borrar)
+roadmap.html         ← OLD (borrar)
+workflow-welcome-email.js ← OLD (duplicado en n8n-workflows.md, borrar)
+
+---
+
+📊 ESTRUCTURA DE CARPETAS EN GITHUB:
+
+Si los archivos se suben directamente a raíz (como dijiste), será:
+
+labstudiopna/ConstructorIA/
+├── index.html
+├── agente-constructor.html
+├── guia-completa.html
+├── server.js
+├── package.json
+├── database-schema.sql
+├── analyze-plan.js
+├── ml-predictor.js
+├── renderers.js
+├── vision-photo.js
+├── suppliers-integration.js
+├── n8n-workflows.md
+├── DEPLOYMENT_GUIDE.md
+├── V1.0_LAUNCH_CHECKLIST.md
+├── MARKETING_LAUNCH_PLAN.md
+├── EMAIL_TEMPLATES_BETA.md
+├── ENGINEERING_SPECS_v1.0.md
+├── README.md
+├── docker-compose.yml
+├── Dockerfile
+├── .env.example
+└── LAUNCH_TRACKER.html (opcional: dashboard de progreso)
+
+---
+
+🚀 PRÓXIMOS PASOS:
+
+1. Verificar que TODOS estos archivos están en la raíz (✅ HECHO)
+2. Eliminar archivos viejos (v1.0, v2.0, v3.0) (⏳ Manual)
+3. npm install (en tu máquina)
+4. npm run dev (para testing local)
+5. Docker build & push
+6. Deploy a producción
+7. Lanzamiento Oct 15, 2026
+
+---
+
+Created: 2026-07-17
+Status: ✅ LISTO PARA GITHUB
