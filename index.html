@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Presupuesta, analiza planos y calcula costos en segundos. Asistente de IA para constructores argentinos. Sin instalación, tus datos siempre bajo control.">
+<meta name="og:title" content="ConstructorIA — Tu asistente de obra experto en IA">
+<meta name="og:description" content="Presupuesta, analiza planos y predice costos. Para constructores que no quieren perder tiempo en Excel.">
+<meta property="og:image" content="https://labstudiopna.github.io/ConstructorIA/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://labstudiopna.github.io/ConstructorIA/og-image.png">
+<meta name="theme-color" content="#8A5A2B">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="manifest" href="site.webmanifest">
+<title>ConstructorIA — Presupuestos con IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="tracker.js" defer></script>
+</head>
+<body>
+
+<header class="site">
+  <nav class="nav">
+    <a href="#" class="brand"><img src="favicon-192.png" alt="ConstructorIA"> Constructor<span class="ia">IA</span></a>
+    <div class="navlinks">
+      <a href="#features">Características</a>
+      <a href="#pricing">Precios</a>
+      <a href="#faq">Preguntas</a>
+      <a href="#contacto">Contacto</a>
+      <a href="guia-completa.html">Guía completa</a>
+      <a href="agente-constructor.html" class="mobile-only-cta">Ir al agente →</a>
+    </div>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">🌙</button>
+      <a href="agente-constructor.html" class="btn btn-primary">Ir al agente →</a>
+      <button class="hamburger" id="hamburgerBtn" aria-label="Menú">☰</button>
+    </div>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <span class="pill">🏗️ Hecho en Paraná, para la obra argentina</span>
+      <h1>Tu asistente de obra <span>experto en IA</span></h1>
+      <p class="lead">Presupuesta, analiza planos y predice costos en segundos. Sin instalación, sin complicaciones — tus datos siempre bajo control.</p>
+      <div class="hero-cta">
+        <a href="agente-constructor.html" class="btn btn-primary">Prueba 7 días gratis →</a>
+        <a href="#features" class="btn btn-ghost">Ver características</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><b>30 seg</b><span>Presupuesto desde el plano</span></div>
+        <div class="stat"><b>±5%</b><span>Precisión de costo final</span></div>
+        <div class="stat"><b>0%</b><span>Instalación</span></div>
+        <div class="stat"><b>24 hs</b><span>Soporte técnico</span></div>
+      </div>
+    </div>
+    <div class="mock">
+      <div class="mock-head"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; labstudiopna.github.io/ConstructorIA</div>
+      <div class="mock-body">
+        <div class="msg user">Necesito presupuestar una reforma en 3 días</div>
+        <div class="msg bot"><b>ConstructorIA:</b> Cargá el plano PDF o describí las tareas. Te genero presupuesto, timeline y lista de materiales en 30 segundos.</div>
+        <div class="msg user">Subí este plano de casa en Paraná</div>
+        <div class="mock-result">✓ Plano analizado | Área: 150 m² | 3 hab, 2 baños, cocina, living<br>Presupuesto estimado: $45.000–52.000 &nbsp;|&nbsp; Timeline: 28–35 días<br>Materiales principales: ladrillo, cemento, herrería, azulejos</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Características</span>
+      <h2>Cinco módulos, un problema cada uno</h2>
+    </div>
+    <div class="grid cols-3">
+      <div class="card">
+        <span class="icon">💬</span>
+        <h3>Chat de obra</h3>
+        <p>Preguntas sobre presupuestos, materiales, normativa. Adjuntá documentos y pedile al agente que ordene la información.</p>
+      </div>
+      <div class="card">
+        <span class="icon">📐</span>
+        <h3>Análisis de planos</h3>
+        <p>Subí PDF o JPG. Extrae dimensiones, ambientes, materiales. Generá presupuesto automático en 30 segundos.</p>
+      </div>
+      <div class="card">
+        <span class="icon">🎨</span>
+        <h3>Renders 3D</h3>
+        <p>Mostrale al cliente cómo quedará la obra. Genera visualizaciones en tres estilos: fotorrealista, arquitectónico, minimal.</p>
+      </div>
+      <div class="card">
+        <span class="icon">📈</span>
+        <h3>Predicciones</h3>
+        <p>Costo final ±5%, timeline ±3 días. Aprende de tus proyectos anteriores. Se mejora cada mes.</p>
+      </div>
+      <div class="card">
+        <span class="icon">🏭</span>
+        <h3>Proveedores</h3>
+        <p>Compará precios en tiempo real. Reorden automático cuando el stock está bajo. Mejor relación precio/calidad siempre.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--bg-alt);">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Cómo funciona</span>
+      <h2>Tres pasos hasta tu presupuesto</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="num">1</div>
+        <h4>Ingresá con Google</h4>
+        <p>Un click. Sin crear usuario, sin contraseñas.</p>
+        <span class="time">5 segundos</span>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <h4>Cargá tu API key</h4>
+        <p>La generás gratis en console.anthropic.com. Nadie ve tu clave.</p>
+        <span class="time">1 minuto</span>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <h4>Subí plano o PDF</h4>
+        <p>El agente analiza y genera presupuesto automático.</p>
+        <span class="time">Segundos</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Precios</span>
+      <h2>Planes simples</h2>
+      <p class="muted">El producto es el mismo en todos los planes. Lo que cambia es el acompañamiento.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="plan">
+        <h3>Prueba gratis</h3>
+        <div class="price">Gratis <small>7 días</small></div>
+        <p class="desc">Acceso completo para probar todo sin tarjeta.</p>
+        <ul>
+          <li>Análisis de planos PDF</li>
+          <li>Chat de obra IA</li>
+          <li>Presupuestos automáticos</li>
+          <li>Renders 3D (3 estilos)</li>
+          <li>Predicciones ML</li>
+          <li>Comparador de proveedores</li>
+          <li>Pagás solo tu API (~$0.01 por análisis)</li>
+        </ul>
+        <a href="agente-constructor.html" class="btn btn-ghost">Probar 7 días</a>
+      </div>
+      <div class="plan popular">
+        <span class="tag">Recomendado</span>
+        <h3>Constructor</h3>
+        <div class="price">USD 80 <small>/mes</small></div>
+        <p class="desc">Para el que lo usa todos los días en obra.</p>
+        <ul>
+          <li>Todo de la prueba gratis</li>
+          <li>Sin límite de tiempo</li>
+          <li>Onboarding 1 a 1</li>
+          <li>Soporte por WhatsApp 24 hs</li>
+          <li>Alertas de vencimientos</li>
+          <li>Hojas diarias por proyecto</li>
+          <li>Histórico de 12 meses</li>
+          <li>Prioridad para features nuevas</li>
+        </ul>
+        <a href="#contacto" class="btn btn-primary">Contratar →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq" style="background:var(--bg-alt);">
+  <div class="container" style="max-width:760px;">
+    <div class="section-head">
+      <span class="eyebrow">Preguntas frecuentes</span>
+      <h2>Lo que todos preguntan</h2>
+    </div>
+    <details class="faq-item">
+      <summary>¿Qué es una API key y cuánto cuesta?</summary>
+      <p>Es una clave personal para usar la IA de Anthropic. Creás cuenta gratis en console.anthropic.com, cargás crédito y generás tu key. Con USD 5 hacés varios cientos de análisis (USD 0.01–0.02 por análisis típico).</p>
+    </details>
+    <details class="faq-item">
+      <summary>¿Mis planos y datos son privados?</summary>
+      <p>Sí. ConstructorIA no tiene backend propio. Tu API key y los archivos van directo de tu navegador a Anthropic. Al cerrar la pestaña, todo se borra del dispositivo salvo lo que vos decidís guardar.</p>
+    </details>
+    <details class="faq-item">
+      <summary>¿Reemplaza al arquitecto o ingeniero?</summary>
+      <p>No. Es una herramienta de apoyo. Acelera presupuestos, análisis y búsqueda de información. La responsabilidad profesional siempre es del ingeniero o arquitecto que firma.</p>
+    </details>
+    <details class="faq-item">
+      <summary>¿Funciona en el celular?</summary>
+      <p>Sí, completamente responsive. Funciona perfecto en smartphone y tablet sin instalar ninguna app.</p>
+    </details>
+    <details class="faq-item">
+      <summary>¿Las predicciones son exactas?</summary>
+      <p>Apuntan a ±5% en costo y ±3 días en timeline. Mejoran conforme más proyectos analizan. Los primeros meses son referencias; después de 10–15 proyectos cargados, la precisión sube significativamente.</p>
+    </details>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="cta-final">
+      <h2>Probalo ahora</h2>
+      <p>Sin registro complicado, sin tarjeta. Solo tu API key y listo.</p>
+      <div class="hero-cta">
+        <a href="agente-constructor.html" class="btn btn-accent">Abrir ConstructorIA →</a>
+        <a href="guia-completa.html" class="btn btn-ghost">Leer la guía completa</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contacto">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Contacto</span>
+      <h2>¿Dudas? Escribinos</h2>
+    </div>
+    <!-- ⚠️ IMPORTANTE: creá un form nuevo en formspree.io y reemplazá TU_FORM_ID por el ID real -->
+    <form class="waitlist" id="contactForm" action="https://formspree.io/f/TU_FORM_ID" method="POST">
+      <div class="row">
+        <div>
+          <label for="cf-nombre">Nombre</label>
+          <input type="text" id="cf-nombre" name="nombre" placeholder="Tu nombre" required>
+        </div>
+        <div>
+          <label for="cf-email">Email</label>
+          <input type="email" id="cf-email" name="email" placeholder="tu@email.com" required>
+        </div>
+      </div>
+      <div class="row">
+        <div class="full">
+          <label for="cf-whatsapp">WhatsApp (opcional)</label>
+          <input type="tel" id="cf-whatsapp" name="whatsapp" placeholder="+54 9 ...">
+        </div>
+      </div>
+      <div class="row">
+        <div class="full">
+          <label for="cf-mensaje">Tu consulta</label>
+          <textarea id="cf-mensaje" name="mensaje" rows="4" placeholder="Contanos qué necesitás" required></textarea>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Enviar mensaje</button>
+      <div class="form-success" id="cfSuccess">✓ ¡Mensaje enviado! Te respondemos dentro de las 24 hs.</div>
+      <p class="form-note">O escribinos directo por <a href="https://wa.me/5493435344597?text=Hola,%20quiero%20info%20sobre%20ConstructorIA" style="color:var(--accent);font-weight:600;">WhatsApp</a></p>
+    </form>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="#" class="brand"><img src="favicon-192.png" alt="ConstructorIA" style="width:30px;height:30px;"> Constructor<span class="ia" style="color:var(--accent-light);">IA</span></a>
+        <p style="margin-top:12px;max-width:320px;">Presupuesta, analiza planos y predice costos de obra con IA. Tus datos siempre bajo tu control — hecho por LABStudio.pna.</p>
+      </div>
+      <div class="foot-links">
+        <b style="color:#fff;font-size:13px;">Producto</b><br><br>
+        <a href="#features">Características</a>
+        <a href="#pricing">Precios</a>
+        <a href="guia-completa.html">Guía completa</a>
+      </div>
+      <div class="foot-links">
+        <b style="color:#fff;font-size:13px;">Soporte</b><br><br>
+        <a href="https://wa.me/5493435344597?text=Hola,%20quiero%20info%20sobre%20ConstructorIA">WhatsApp</a>
+        <a href="#contacto">Escribinos</a>
+        <a href="#faq">FAQ</a>
+        <a href="terminos.html">Términos y Privacidad</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 ConstructorIA · Todos los derechos reservados</span>
+      <span>Desarrollado por <a href="https://labstudiopna.github.io" target="_blank">LABStudio.pna</a> · Paraná, Entre Ríos, Argentina</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const toggle = document.getElementById('themeToggle');
+  const root = document.documentElement;
+  function applyTheme(t){ root.setAttribute('data-theme', t); toggle.textContent = t === 'dark' ? '☀️' : '🌙'; }
+  applyTheme('light');
+  toggle.addEventListener('click', () => {
+    const current = root.getAttribute('data-theme');
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+  });
+
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const navlinksEl = document.querySelector('.navlinks');
+  if (hamburgerBtn && navlinksEl) {
+    hamburgerBtn.addEventListener('click', () => {
+      const isOpen = navlinksEl.classList.toggle('open');
+      hamburgerBtn.textContent = isOpen ? '✕' : '☰';
+    });
+    navlinksEl.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      navlinksEl.classList.remove('open');
+      hamburgerBtn.textContent = '☰';
+    }));
+  }
+
+  const cfForm = document.getElementById('contactForm');
+  const cfSuccess = document.getElementById('cfSuccess');
+  if (cfForm) {
+    cfForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = cfForm.querySelector('button[type="submit"]');
+      const originalText = btn.textContent;
+      btn.textContent = 'Enviando...';
+      btn.disabled = true;
+      try {
+        const res = await fetch(cfForm.action, {
+          method: 'POST',
+          body: new FormData(cfForm),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          cfForm.reset();
+          cfSuccess.style.display = 'block';
+        } else {
+          alert('No se pudo enviar. Probá de nuevo o escribinos por WhatsApp.');
+        }
+      } catch (err) {
+        alert('No se pudo enviar. Probá de nuevo o escribinos por WhatsApp.');
+      } finally {
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }
+    });
+  }
+</script>
+</body>
+</html>
