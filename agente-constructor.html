@@ -138,6 +138,12 @@ table.data tr:hover td{background:var(--bg-alt)}
 .user-chip{position:fixed;bottom:14px;right:14px;z-index:60;background:var(--card);border:1px solid var(--border);border-radius:999px;padding:7px 14px;font-size:12px;color:var(--muted);box-shadow:var(--shadow);display:none;align-items:center;gap:10px}
 .user-chip b{color:var(--text);font-weight:600}
 .user-chip button{background:none;border:none;color:var(--bad);cursor:pointer;font-size:12px;font-family:var(--sans)}
+.lab-pills{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:24px;text-align:left}
+.lab-pill{background:var(--bg-alt);border:1px solid var(--border);border-radius:9px;padding:8px 12px;font-size:12px;color:var(--muted)}
+.lab-paso{text-align:left;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:18px 0 8px}
+.lab-key-input{width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:14px;font-family:monospace}
+.lab-enter-btn{width:100%;margin-top:18px;background:var(--brand);color:#fff;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:600;cursor:pointer;font-family:var(--sans);transition:opacity .2s}
+.lab-enter-btn:disabled{opacity:.45;cursor:not-allowed}
 </style>
 </head>
 <body>
@@ -146,10 +152,21 @@ table.data tr:hover td{background:var(--bg-alt)}
   <div class="login-card" id="loginCard">
     <img src="favicon-192.png" alt="ConstructorIA">
     <h1>Constructor<em>IA</em></h1>
-    <p class="sub">Tu asistente de obra con IA.<br>Ingresá con Google para empezar — sin contraseñas, sin formularios.</p>
+    <p class="sub">Tu asistente de obra con IA.<br>Analizá planos, presupuestá y llevá el control de tus obras.</p>
+    <div class="lab-pills">
+      <div class="lab-pill">📐 Análisis de planos</div>
+      <div class="lab-pill">🧮 Cómputos y acero</div>
+      <div class="lab-pill">📋 Hojas y certificados</div>
+      <div class="lab-pill">💲 Precios de referencia</div>
+    </div>
+    <p class="lab-paso">Paso 1 — Identificate con Google</p>
     <div id="google-signin-btn"></div>
     <p id="login-status"></p>
-    <p class="login-note">🎁 <b>5 días de prueba gratis</b> con acceso completo.<br>Tus datos de obra quedan siempre en tu navegador.</p>
+    <p class="lab-paso">Paso 2 — Tu API key de Anthropic</p>
+    <input type="password" class="lab-key-input" id="labKeyInput" placeholder="sk-ant-api03-..." autocomplete="off">
+    <p style="text-align:left;font-size:12px;color:var(--muted);margin-top:8px;">Obtené tu key gratis en <a href="https://console.anthropic.com" target="_blank" style="color:var(--accent);">console.anthropic.com</a> →</p>
+    <button class="lab-enter-btn" id="labEnterBtn" disabled>Ingresar al agente →</button>
+    <p class="login-note">🎁 <b>5 días de prueba gratis</b> con acceso completo. 🔒 <b>Tu privacidad:</b> la API key se guarda solo en tu navegador y se borra al cerrar la pestaña. Este sitio no tiene backend ni registra tus datos.</p>
   </div>
   <div class="login-card" id="trialCard" style="display:none;">
     <img src="favicon-192.png" alt="ConstructorIA">
@@ -462,7 +479,7 @@ const LAB_AUTH_URL = 'https://vps-6064485-x.dattaweb.com/webhook/labstudio-auth'
 const LAB_CLIENT_ID = '770326349307-rv1uf77479oc8ejrsh3hmhkieqgous2o.apps.googleusercontent.com';
 const LAB_PRODUCTO = 'constructoria';
 const LAB_USER_KEY = 'constructoria_user';
-
+let labUserData = null;
 function labMostrarSesion(data){
   const overlay = document.getElementById('loginOverlay');
   const chip = document.getElementById('userChip');
@@ -484,29 +501,34 @@ async function labManejarLogin(response){
   const st = document.getElementById('login-status');
   st.textContent = 'Verificando…';
   try{
-    const res = await fetch(LAB_AUTH_URL, {
-      method:'POST',
-      headers:{ 'Content-Type':'application/json' },
-      body: JSON.stringify({ idToken: response.credential, producto: LAB_PRODUCTO })
-    });
+    const res = await fetch(LAB_AUTH_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ idToken: response.credential, producto: LAB_PRODUCTO }) });
     const data = await res.json();
-    if (!res.ok || data.error) throw new Error(data.error || 'Error de verificación');
+    if (!res.ok || data.error) throw new Error(data.error || 'Error');
     localStorage.setItem(LAB_USER_KEY, JSON.stringify(data));
-    labMostrarSesion(data);
+    labUserData = data;
+    if (data.plan === 'gratis' && data.trialExpirado){ labMostrarSesion(data); return; }
+    st.textContent = data.esNuevo ? '✅ ¡Cuenta creada, '+data.nombre+'! Completá el paso 2 y entrá.' : '✅ ¡Hola de nuevo, '+data.nombre+'!';
+    document.getElementById('labEnterBtn').disabled = false;
   }catch(e){
     st.textContent = '⚠️ No se pudo verificar el ingreso. Probá de nuevo.';
     console.error('Login:', e);
   }
 }
 function labInitLogin(){
-  if (typeof google === 'undefined' || !google.accounts || !google.accounts.id){
-    setTimeout(labInitLogin, 300);
-    return;
-  }
+  if (typeof google === 'undefined' || !google.accounts || !google.accounts.id){ setTimeout(labInitLogin, 300); return; }
   google.accounts.id.initialize({ client_id: LAB_CLIENT_ID, callback: labManejarLogin });
   const btn = document.getElementById('google-signin-btn');
   if (btn) google.accounts.id.renderButton(btn, { theme:'outline', size:'large', text:'continue_with', width: 300 });
 }
+document.getElementById('labEnterBtn').addEventListener('click', ()=>{
+  const k = document.getElementById('labKeyInput').value.trim();
+  if (k){
+    sessionStorage.setItem('constructoria_api_key', k);
+    const appInput = document.getElementById('apiKeyInput');
+    if (appInput){ appInput.value = k; appInput.dispatchEvent(new Event('input')); }
+  }
+  if (labUserData) labMostrarSesion(labUserData);
+});
 document.getElementById('logoutBtn').addEventListener('click', ()=>{
   if (!confirm('¿Cerrar sesión?')) return;
   localStorage.removeItem(LAB_USER_KEY);
@@ -515,8 +537,11 @@ document.getElementById('logoutBtn').addEventListener('click', ()=>{
   document.getElementById('loginCard').style.display = 'block';
   document.getElementById('loginOverlay').style.display = 'flex';
   document.getElementById('login-status').textContent = '';
+  document.getElementById('labEnterBtn').disabled = true;
 });
 (function(){
+  const savedKey = sessionStorage.getItem('constructoria_api_key');
+  if (savedKey) document.getElementById('labKeyInput').value = savedKey;
   const saved = localStorage.getItem(LAB_USER_KEY);
   if (saved){ try{ labMostrarSesion(JSON.parse(saved)); }catch(e){} }
   labInitLogin();
