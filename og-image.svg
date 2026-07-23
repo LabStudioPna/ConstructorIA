@@ -20,14 +20,16 @@
   <!-- icono -->
   <g transform="translate(90,90)">
     <rect width="150" height="150" rx="34" fill="url(#iconBg)"/>
-    <line x1="52" y1="117" x2="52" y2="33" stroke="#FBF3E9" stroke-width="5.5" stroke-linecap="round"/>
-    <line x1="52" y1="35" x2="104" y2="35" stroke="#FBF3E9" stroke-width="5.5" stroke-linecap="round"/>
-    <line x1="52" y1="35" x2="35" y2="50" stroke="#FBF3E9" stroke-width="4.5" stroke-linecap="round"/>
-    <line x1="89" y1="35" x2="89" y2="60" stroke="#FBF3E9" stroke-width="4" stroke-linecap="round"/>
-    <rect x="82" y="60" width="14" height="10" rx="2.5" fill="#FBF3E9"/>
-    <line x1="52" y1="35" x2="63" y2="56" stroke="#FBF3E9" stroke-width="3.5" stroke-linecap="round"/>
-    <rect x="39" y="114" width="26" height="8" rx="2.5" fill="#FBF3E9"/>
-    <path d="M104 88 L109 97 L118 102 L109 107 L104 116 L99 107 L90 102 L99 97 Z" fill="#F5C453"/>
+    <!-- hard hat: brim -->
+    <ellipse cx="75" cy="103.125" rx="46.875" ry="8.2" fill="#FBF3E9"/>
+    <!-- hard hat: dome -->
+    <path d="M30.47 103.125 A44.53 44.53 0 0 1 119.53 103.125 Z" fill="#FBF3E9"/>
+    <!-- ridge grooves -->
+    <line x1="75" y1="60" x2="75" y2="102.19" stroke="#7A4A1A" stroke-width="2.8" stroke-linecap="round" opacity="0.32"/>
+    <line x1="56.25" y1="65.625" x2="64.69" y2="102.19" stroke="#7A4A1A" stroke-width="2.8" stroke-linecap="round" opacity="0.32"/>
+    <line x1="93.75" y1="65.625" x2="85.31" y2="102.19" stroke="#7A4A1A" stroke-width="2.8" stroke-linecap="round" opacity="0.32"/>
+    <!-- AI spark accent -->
+    <path d="M104.06 88.13 L108.75 97.5 L118.13 102.19 L108.75 106.88 L104.06 116.25 L99.38 106.88 L90 102.19 L99.38 97.5 Z" fill="#F5C453"/>
   </g>
 
   <!-- título -->
