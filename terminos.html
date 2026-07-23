@@ -1,209 +1,236 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Términos de servicio y política de privacidad — BarIA">
-    <meta name="theme-color" content="#8B5CF6">
-    <link rel="icon" type="image/svg+xml" href="icon.svg">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    <link rel="shortcut icon" href="favicon.ico">
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-    <link rel="manifest" href="site.webmanifest">
-    <title>Términos y Privacidad | BarIA</title>
-    <style>
-        :root {
-            --bg: #0A0C12;
-            --fg: #E8E9EB;
-            --fg-muted: #9CA3AF;
-            --brand: #8B5CF6;
-            --border: #1F2937;
-            --surface: #111827;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Términos y Privacidad — ConstructorIA</title>
+<meta name="description" content="Términos de uso y política de privacidad de ConstructorIA, asistente de obra con inteligencia artificial.">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
+<link rel="shortcut icon" href="favicon.ico">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#8A5A2B;--brand-light:#C87D2F;--accent:#C87D2F;
+  --border:#E7DFD1;--text:#241B12;--mid:#6E5F4B;--dim:#93835F;
+  --heading:#8A5A2B;
+  --bg-page:#FAF8F5;--surface:#fff;--surface-2:#F1ECE4;
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'Inter',system-ui,sans-serif;
+}
+[data-theme="dark"]{
+  --border:rgba(255,255,255,.12);--text:#F1ECE4;--mid:#B5A78F;--dim:#93835F;
+  --heading:#F1ECE4;
+  --bg-page:#171208;--surface:#2A2115;--surface-2:#221A10;
+}
+body{font-family:var(--sans);color:var(--text);background:var(--bg-page);line-height:1.7;transition:background .2s,color .2s}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+header{position:sticky;top:0;z-index:100;background:var(--bg-page);border-bottom:1px solid var(--border);padding:0 24px}
+.nav{max-width:900px;margin:0 auto;height:64px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:var(--serif);font-weight:600;font-size:21px;color:var(--heading)}
+.logo em{font-style:italic;color:var(--accent)}
+.nav-links{display:flex;gap:20px;align-items:center}
+.nav-links a{color:var(--mid);text-decoration:none;font-size:14px;font-weight:500}
+.nav-links a:hover{color:var(--heading)}
+#theme-toggle{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px}
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background-color: var(--bg);
-            color: var(--fg);
-            line-height: 1.8;
-            padding: 2rem;
-        }
+.container{max-width:800px;margin:0 auto;padding:60px 24px 100px}
+h1{font-family:var(--serif);font-size:clamp(28px,4vw,40px);font-weight:600;color:var(--heading);margin-bottom:8px}
+.subtitulo{color:var(--dim);font-size:14px;margin-bottom:48px}
+.toc{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:48px}
+.toc h3{font-size:13px;color:var(--heading);margin-bottom:12px;text-transform:uppercase;letter-spacing:.12em;font-family:var(--sans);font-weight:600}
+.toc ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.toc a{color:var(--mid);text-decoration:none;font-size:14px}
+.toc a:hover{color:var(--brand-light)}
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
+section{margin-bottom:44px;scroll-margin-top:80px}
+h2{font-family:var(--serif);font-size:23px;font-weight:600;color:var(--heading);margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--border)}
+h3{font-size:16px;font-weight:600;color:var(--heading);margin:20px 0 8px}
+p{color:var(--mid);margin-bottom:14px;font-size:15px}
+ul,ol{color:var(--mid);margin:0 0 14px 22px;font-size:15px}
+li{margin-bottom:6px}
+strong{color:var(--text);font-weight:600}
+code{background:var(--surface-2);border:1px solid var(--border);border-radius:5px;padding:1px 6px;font-size:13px}
 
-        header {
-            margin-bottom: 3rem;
-        }
+.highlight{background:var(--surface-2);border-left:3px solid var(--brand-light);border-radius:0 8px 8px 0;padding:16px 20px;margin:16px 0}
+.highlight p{margin:0;color:var(--text);font-size:14px}
+.warning{background:rgba(200,125,47,.10);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:16px 20px;margin:16px 0}
+.warning p{margin:0;color:var(--text);font-size:14px}
 
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1.25rem;
-            font-weight: 700;
-            text-decoration: none;
-            color: var(--fg);
-            margin-bottom: 2rem;
-        }
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+th{background:var(--surface-2);color:var(--heading);text-align:left;padding:10px 12px;border:1px solid var(--border)}
+td{padding:10px 12px;border:1px solid var(--border);color:var(--mid)}
 
-        .logo-icon {
-            width: 32px;
-            height: 32px;
-        }
+footer{border-top:1px solid var(--border);padding:32px 24px;text-align:center;color:var(--dim);font-size:13px}
+footer a{color:var(--brand-light);text-decoration:none}
 
-        h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .meta {
-            color: var(--fg-muted);
-            font-size: 0.95rem;
-        }
-
-        h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.75rem;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            color: var(--brand);
-        }
-
-        h3 {
-            font-size: 1.1rem;
-            margin-top: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        p {
-            margin-bottom: 1rem;
-            color: var(--fg-muted);
-        }
-
-        ul, ol {
-            margin-left: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        li {
-            margin-bottom: 0.5rem;
-            color: var(--fg-muted);
-        }
-
-        .highlight {
-            background: rgba(139, 92, 246, 0.1);
-            padding: 1.5rem;
-            border-left: 3px solid var(--brand);
-            border-radius: 4px;
-            margin: 1.5rem 0;
-        }
-
-        a {
-            color: var(--brand);
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        .last-updated {
-            color: var(--fg-muted);
-            font-size: 0.85rem;
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--border);
-        }
-    </style>
+@media(max-width:640px){
+  .container{padding:40px 16px 60px}
+  .nav-links a:not(.nav-cta){display:none}
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <a href="index.html" class="logo">
-                <img src="favicon-192.png" alt="BarIA" class="logo-icon">
-                BarIA
-            </a>
-            <h1>Términos y Privacidad</h1>
-            <p class="meta">Última actualización: Julio 2026</p>
-        </header>
 
-        <h2>1. Uso de BarIA</h2>
-        <p>BarIA es una herramienta de apoyo para costeo de bebidas y consultas normativas en bares y restaurantes. No reemplaza a un POS, a un contador ni a asesoría legal formal.</p>
-        <p>Al usar BarIA aceptás que sos responsable de verificar la información normativa con las autoridades competentes de tu jurisdicción. Los horarios, requisitos y regulaciones cambian — BarIA intenta estar actualizado, pero siempre confirmá con organismos oficiales.</p>
-
-        <h2>2. Tu API Key de Anthropic</h2>
-        <p>Para usar BarIA necesitás una API key de Anthropic (gratis desde <a href="https://console.anthropic.com">console.anthropic.com</a>).</p>
-        <div class="highlight">
-            <strong>Tu API key nunca llega a nuestros servidores.</strong> Se almacena únicamente en <code>sessionStorage</code> de tu navegador. Al cerrar la pestaña se borra automáticamente.
-        </div>
-        <p>Vos sos responsable de:</p>
-        <ul>
-            <li>Mantener tu API key confidencial</li>
-            <li>No compartirla con terceros</li>
-            <li>Monitorear tu consumo de crédito en Anthropic (pagás directamente a Anthropic, no a nosotros)</li>
-            <li>Limpiar tu navegador si accedés desde una máquina compartida</li>
-        </ul>
-
-        <h2>3. Privacidad de tus datos</h2>
-        <h3>Qué guardamos</h3>
-        <p>Si contratás el Plan Bar, podés conectar tu Google Sheets personal. Tus datos se guardan en tu propia hoja (en tu Google Drive), no en servidores nuestros.</p>
-        <p>No guardamos:</p>
-        <ul>
-            <li>Tus recetas</li>
-            <li>Tus consultas al chat</li>
-            <li>Tu API key</li>
-            <li>Información de tu bar</li>
-        </ul>
-
-        <h3>Qué pasa con Anthropic</h3>
-        <p>Tu API key va directa a Anthropic. Revisá su <a href="https://www.anthropic.com/privacy">política de privacidad</a> para entender cómo procesan datos. Anthropic puede usar tus inputs para entrenar/mejorar modelos (según sus términos), pero no guardamos copia local.</p>
-
-        <h2>4. Cookies y rastreo</h2>
-        <p>BarIA no usa cookies de rastreo. Solo usamos <code>sessionStorage</code> y <code>localStorage</code> para guardar tu API key y preferencias locales — nada se envía a terceros.</p>
-
-        <h2>5. Plan Estudio / Plan Bar</h2>
-        <p>Si contratás el plan pago (USD 80/mes):</p>
-        <ul>
-            <li>Facturamos directamente a tu email</li>
-            <li>Tus datos de contacto se guardan en nuestro CRM (para soporte y avisos de cambios normativos)</li>
-            <li>Podés cancelar en cualquier momento</li>
-        </ul>
-
-        <h2>6. Limitaciones y exención de responsabilidad</h2>
-        <p>BarIA se proporciona "tal cual" sin garantías. No somos responsables por:</p>
-        <ul>
-            <li>Errores en el costeo (siempre verificá precios de proveedores)</li>
-            <li>Cambios en normativa que no reflejemos a tiempo</li>
-            <li>Multas o sanciones por incumplimiento normativo</li>
-            <li>Caídas de internet o errores en tu API key</li>
-            <li>Decisiones de negocio basadas en los análisis</li>
-        </ul>
-
-        <h2>7. Cambios en estos términos</h2>
-        <p>Podemos actualizar estos términos en cualquier momento. Si hacemos cambios significativos, te avisaremos por email (si estás en el plan pago).</p>
-
-        <h2>8. Contacto</h2>
-        <p>Si tenés preguntas sobre privacidad o estos términos:</p>
-        <ul>
-            <li>WhatsApp: <a href="https://wa.me/5493425387578">+54 9 3425 387578</a></li>
-            <li>Email: <a href="mailto:labstudio.pna@gmail.com">labstudio.pna@gmail.com</a></li>
-        </ul>
-
-        <p class="last-updated">
-            BarIA · Desarrollado por <a href="https://labstudiopna.github.io">LABStudio.pna</a> · Paraná, Entre Ríos, Argentina<br>
-            © 2026 — Todos los derechos reservados
-        </p>
+<header>
+  <div class="nav">
+    <a href="index.html" class="logo">Constructor<em>IA</em></a>
+    <div class="nav-links">
+      <a href="index.html">← Volver a inicio</a>
+      <a href="agente-constructor.html">Ir al Agente</a>
+      <button id="theme-toggle" onclick="toggleTheme()" title="Cambiar tema">🌙</button>
     </div>
+  </div>
+</header>
+
+<div class="container">
+  <h1>Términos de Uso y Política de Privacidad</h1>
+  <p class="subtitulo">Última actualización: 18 de julio de 2026</p>
+
+  <div class="toc">
+    <h3>Contenido</h3>
+    <ul>
+      <li><a href="#que-es">1. Qué es ConstructorIA</a></li>
+      <li><a href="#como-funciona">2. Cómo funciona técnicamente (importante)</a></li>
+      <li><a href="#privacidad">3. Privacidad y tratamiento de datos</a></li>
+      <li><a href="#api-key">4. Tu API Key de Anthropic</a></li>
+      <li><a href="#responsabilidad">5. Responsabilidad profesional</a></li>
+      <li><a href="#planes">6. Planes y pagos</a></li>
+      <li><a href="#uso-aceptable">7. Uso aceptable</a></li>
+      <li><a href="#cambios">8. Cambios a este documento</a></li>
+      <li><a href="#contacto">9. Contacto</a></li>
+    </ul>
+  </div>
+
+  <section id="que-es">
+    <h2>1. Qué es ConstructorIA</h2>
+    <p>ConstructorIA es una herramienta desarrollada por <strong>LABStudio.pna</strong> (Paraná, Entre Ríos, Argentina) que utiliza inteligencia artificial para asistir a constructores, contratistas y profesionales de la obra en Argentina: análisis de planos, generación de presupuestos y cómputos, estimación de costos y plazos, visualizaciones 3D y comparación de proveedores.</p>
+    <p>ConstructorIA es una <strong>herramienta de asistencia</strong>, no un servicio de asesoría profesional. Su uso no reemplaza la intervención de un arquitecto, ingeniero, maestro mayor de obras o profesional matriculado.</p>
+  </section>
+
+  <section id="como-funciona">
+    <h2>2. Cómo funciona técnicamente</h2>
+    <p>Es importante que entiendas la arquitectura de ConstructorIA antes de usarlo, porque determina qué datos tuyos (y de tus proyectos) pasan por dónde:</p>
+
+    <h3>2.1 Sin backend propio</h3>
+    <p>ConstructorIA funciona directamente en tu navegador. <strong>LABStudio no recolecta ni almacena ningún dato de identificación tuyo</strong> por el solo hecho de usar la herramienta.</p>
+
+    <h3>2.2 Análisis de planos, documentos e IA</h3>
+    <p>Cuando subís un plano (PDF o imagen), un documento o consultás al chat, esa información se envía <strong>directamente desde tu navegador a la API de Anthropic</strong> (la empresa que provee el modelo de inteligencia artificial), usando tu propia API Key personal. <strong>LABStudio no aloja ni tiene acceso a esos datos en ningún momento</strong> — no existe un servidor de LABStudio en el medio de ese flujo.</p>
+
+    <h3>2.3 Almacenamiento de tus datos</h3>
+    <p>El historial de proyectos, presupuestos y análisis se guarda únicamente en el <code>localStorage</code> de tu propio navegador, en tu dispositivo. Ese historial no se sincroniza ni se envía a ningún servidor de LABStudio, y se pierde si limpiás los datos del navegador o cambiás de dispositivo.</p>
+
+    <div class="highlight">
+      <p><strong>En resumen:</strong> tus planos, presupuestos y datos de obra nunca pasan por servidores de LABStudio. Hoy, ConstructorIA no recolecta ningún dato personal tuyo salvo que completes voluntariamente el formulario de contacto.</p>
+    </div>
+  </section>
+
+  <section id="privacidad">
+    <h2>3. Privacidad y tratamiento de datos</h2>
+
+    <h3>3.1 Qué datos recolecta LABStudio</h3>
+    <table>
+      <tr><th>Dato</th><th>Para qué</th><th>Dónde se guarda</th></tr>
+      <tr><td>Nombre, email y WhatsApp (solo si completás el formulario de contacto)</td><td>Contactarte para responder tu consulta o coordinar el acceso al plan pago</td><td>Formspree (formulario de contacto)</td></tr>
+    </table>
+
+    <h3>3.2 Qué datos NO recolecta LABStudio</h3>
+    <ul>
+      <li>Contenido de tus planos, presupuestos o documentos analizados</li>
+      <li>Datos de tus proyectos, clientes, costos o de terceros</li>
+      <li>Tu API Key de Anthropic (queda solo en el <code>sessionStorage</code> de tu navegador, se borra al cerrar la pestaña)</li>
+      <li>El contenido de tus conversaciones con el chat de IA</li>
+      <li>Tu historial de proyectos o presupuestos (vive solo en tu navegador)</li>
+    </ul>
+
+    <h3>3.3 Terceros que sí procesan datos (fuera de LABStudio)</h3>
+    <ul>
+      <li><strong>Anthropic (Claude API):</strong> procesa el contenido que le enviás para el análisis. Se rige por su propia política de privacidad, disponible en anthropic.com/privacy.</li>
+      <li><strong>Formspree:</strong> si completás el formulario de contacto, esos datos los procesa Formspree para hacérnoslos llegar por email, sujeto a su propia política de privacidad.</li>
+      <li><strong>Google (inicio de sesión):</strong> si usás el ingreso con Google, la autenticación la maneja Google según su propia política de privacidad. ConstructorIA solo recibe tu identificación básica para habilitar el acceso.</li>
+    </ul>
+
+    <h3>3.4 Tus derechos</h3>
+    <p>Si completaste el formulario de contacto, podés pedirnos en cualquier momento que eliminemos esos datos escribiéndonos a los datos de contacto de la sección 9. Como ConstructorIA no almacena tus proyectos en servidores propios, no hay ningún otro dato personal tuyo almacenado por LABStudio para eliminar.</p>
+  </section>
+
+  <section id="api-key">
+    <h2>4. Tu API Key de Anthropic</h2>
+    <p>Para usar las funciones de inteligencia artificial de ConstructorIA necesitás tu propia API Key de Anthropic (console.anthropic.com), con su propio método de pago cargado ahí.</p>
+    <ul>
+      <li>El costo del uso de la IA lo pagás <strong>directamente a Anthropic</strong>, no a LABStudio</li>
+      <li>Tu API Key se guarda únicamente en el <code>sessionStorage</code> de tu navegador — se borra automáticamente al cerrar la pestaña</li>
+      <li>Sos responsable de la seguridad y el uso de tu propia API Key</li>
+    </ul>
+  </section>
+
+  <section id="responsabilidad">
+    <h2>5. Responsabilidad profesional</h2>
+    <div class="warning">
+      <p><strong>Importante:</strong> los presupuestos, cómputos, estimaciones de costos y plazos, y análisis de planos generados por ConstructorIA son producidos por un modelo de inteligencia artificial y pueden contener errores. Los precios de materiales y mano de obra varían constantemente. ConstructorIA no reemplaza el criterio ni la responsabilidad de un arquitecto, ingeniero o profesional matriculado. Todo presupuesto, cómputo o documentación de obra debe ser revisado por un profesional antes de firmarse, presentarse o usarse como base de un contrato.</p>
+    </div>
+    <p>LABStudio no se responsabiliza por decisiones tomadas exclusivamente en base a los resultados generados por la herramienta, ni por errores, pérdidas económicas, sobrecostos de obra o conflictos derivados de su uso sin la debida revisión profesional.</p>
+  </section>
+
+  <section id="planes">
+    <h2>6. Planes y pagos</h2>
+    <p>ConstructorIA ofrece una prueba gratuita de 5 días (con acceso completo a las funciones, pagando solo tu propio consumo de API a Anthropic) y un Plan Constructor pago, que incluye acompañamiento, onboarding 1 a 1, soporte prioritario por WhatsApp e histórico extendido.</p>
+    <p>Los pagos de planes se gestionan de forma directa con LABStudio. Los términos específicos de facturación se comunican al momento de la contratación.</p>
+  </section>
+
+  <section id="uso-aceptable">
+    <h2>7. Uso aceptable</h2>
+    <p>Al usar ConstructorIA, te comprometés a:</p>
+    <ul>
+      <li>No usar la herramienta para fines ilegales o fraudulentos</li>
+      <li>No intentar vulnerar la seguridad de la plataforma o de otros usuarios</li>
+      <li>Ser responsable de la veracidad de los planos y documentos que subís para análisis</li>
+      <li>No revender ni redistribuir el acceso a la herramienta sin autorización de LABStudio</li>
+    </ul>
+  </section>
+
+  <section id="cambios">
+    <h2>8. Cambios a este documento</h2>
+    <p>Podemos actualizar estos términos ocasionalmente. Los cambios importantes se comunicarán a través del sitio. El uso continuado de ConstructorIA después de un cambio implica la aceptación de los nuevos términos.</p>
+  </section>
+
+  <section id="contacto">
+    <h2>9. Contacto</h2>
+    <p>Para consultas sobre estos términos, privacidad, o para ejercer tus derechos sobre tus datos:</p>
+    <ul>
+      <li>Email: <a href="mailto:labstudio.pna@gmail.com" style="color:var(--brand-light)">labstudio.pna@gmail.com</a></li>
+      <li>WhatsApp: <a href="https://wa.me/5493435344597" style="color:var(--brand-light)">+54 9 3435 344597</a></li>
+    </ul>
+  </section>
+</div>
+
+<footer>
+  <p>ConstructorIA — Desarrollado por <a href="https://labstudiopna.github.io" target="_blank">LABStudio.pna</a> · Paraná, Entre Ríos, Argentina</p>
+</footer>
+
+<script>
+  (function() {
+    const savedTheme = localStorage.getItem('constructoria_theme') || 'light';
+    if (savedTheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+  })();
+  function applyTheme(theme) {
+    if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    else document.documentElement.removeAttribute('data-theme');
+    const btn = document.getElementById('theme-toggle');
+    if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  }
+  function toggleTheme() {
+    const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    const next = current === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('constructoria_theme', next);
+    applyTheme(next);
+  }
+  document.addEventListener('DOMContentLoaded', () => {
+    applyTheme(localStorage.getItem('constructoria_theme') || 'light');
+  });
+</script>
+
 </body>
 </html>

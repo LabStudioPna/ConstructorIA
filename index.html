@@ -1,621 +1,452 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Asistente IA para bares y restaurantes en Argentina. Costeá tragos, controlá márgenes, normativa por provincia. Sin instalación, tus datos siempre bajo tu control.">
-    <meta name="keywords" content="costeo de tragos, recetas bar, margen, UTHGRA, habilitaciones, normativa argentina, software bar, restaurant IA">
-    <meta property="og:title" content="BarIA — Tu asistente de costeo y normativa">
-    <meta property="og:description" content="Costeá tu trago en segundos. Rendimiento de botella, pour cost, márgenes y normativa por provincia — con IA, sin backend.">
-    <meta property="og:image" content="https://labstudiopna.github.io/BarIA/og-image.png">
-    <meta property="og:url" content="https://labstudiopna.github.io/BarIA/">
-    <meta property="og:type" content="website">
-    <meta property="og:locale" content="es_AR">
-    <meta property="og:site_name" content="BarIA">
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="BarIA — Tu asistente de costeo y normativa">
-    <meta name="twitter:description" content="Costeá tu trago en segundos. Rendimiento de botella, pour cost, márgenes — con IA, sin backend.">
-    <meta name="twitter:image" content="https://labstudiopna.github.io/BarIA/og-image.png">
-    <meta name="theme-color" content="#8B5CF6">
-    <link rel="icon" type="image/svg+xml" href="icon.svg">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    <link rel="shortcut icon" href="favicon.ico">
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-    <link rel="manifest" href="site.webmanifest">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="BarIA">
-    <meta name="mobile-web-app-capable" content="yes">
-    <title>BarIA — Tu asistente de costeo y normativa</title>
-    <style>
-        :root {
-            --bg: #0A0C12;
-            --fg: #E8E9EB;
-            --fg-muted: #9CA3AF;
-            --brand: #8B5CF6;
-            --brand-2: #F5B841;
-            --accent-1: #10B981;
-            --accent-2: #F59E0B;
-            --border: #1F2937;
-            --surface: #111827;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background-color: var(--bg);
-            color: var(--fg);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* Tipografía */
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Playfair Display', serif;
-            font-weight: 700;
-            line-height: 1.2;
-        }
-
-        h1 { font-size: 3.5rem; }
-        h2 { font-size: 2.5rem; }
-        h3 { font-size: 1.5rem; }
-
-        /* Header */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            background: rgba(10, 12, 18, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border);
-            padding: 1.5rem 2rem;
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1.25rem;
-            font-weight: 700;
-            text-decoration: none;
-            color: var(--fg);
-        }
-
-        .logo-icon {
-            width: 32px;
-            height: 32px;
-        }
-
-        nav {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        nav a {
-            color: var(--fg-muted);
-            text-decoration: none;
-            font-size: 0.95rem;
-            transition: color 0.3s;
-        }
-
-        nav a:hover {
-            color: var(--brand);
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 0.75rem 1.5rem;
-            background: var(--brand);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .cta-button:hover {
-            background: #7C3AED;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
-        }
-
-        .cta-button-secondary {
-            background: transparent;
-            border: 1px solid var(--brand-2);
-            color: var(--brand-2);
-        }
-
-        .cta-button-secondary:hover {
-            background: rgba(245, 184, 65, 0.1);
-            border-color: var(--brand);
-            color: var(--brand);
-        }
-
-        /* Main */
-        main {
-            padding-top: 80px;
-        }
-
-        /* Hero */
-        .hero {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
-            text-align: center;
-        }
-
-        .hero h1 {
-            background: linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 1.5rem;
-        }
-
-        .hero p {
-            font-size: 1.25rem;
-            color: var(--fg-muted);
-            max-width: 700px;
-            margin: 0 auto 2rem;
-        }
-
-        .hero-cta {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 3rem;
-        }
-
-        /* Features */
-        .features {
-            max-width: 1200px;
-            margin: 4rem auto;
-            padding: 0 2rem;
-        }
-
-        .features h2 {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .feature-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 2rem;
-            transition: all 0.3s;
-        }
-
-        .feature-card:hover {
-            border-color: var(--brand);
-            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.1);
-        }
-
-        .feature-icon {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .feature-card h3 {
-            margin-bottom: 0.5rem;
-            color: var(--brand);
-        }
-
-        .feature-card p {
-            font-size: 0.95rem;
-            color: var(--fg-muted);
-        }
-
-        /* Pricing */
-        .pricing {
-            max-width: 1200px;
-            margin: 4rem auto;
-            padding: 0 2rem;
-        }
-
-        .pricing h2 {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .pricing-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 2.5rem;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .pricing-card.featured {
-            border-color: var(--brand);
-            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.15);
-            transform: scale(1.05);
-        }
-
-        .pricing-card h3 {
-            margin-bottom: 0.5rem;
-            color: var(--brand);
-        }
-
-        .pricing-amount {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--fg);
-            margin: 1.5rem 0;
-        }
-
-        .pricing-amount small {
-            font-size: 1rem;
-            color: var(--fg-muted);
-        }
-
-        .pricing-description {
-            color: var(--fg-muted);
-            font-size: 0.9rem;
-            margin-bottom: 2rem;
-        }
-
-        .pricing-features {
-            text-align: left;
-            margin-bottom: 2rem;
-            font-size: 0.9rem;
-        }
-
-        .pricing-features li {
-            list-style: none;
-            padding: 0.5rem 0;
-            color: var(--fg-muted);
-        }
-
-        .pricing-features li:before {
-            content: "✓ ";
-            color: var(--brand-2);
-            font-weight: bold;
-            margin-right: 0.5rem;
-        }
-
-        /* FAQ */
-        .faq {
-            max-width: 800px;
-            margin: 4rem auto;
-            padding: 0 2rem;
-        }
-
-        .faq h2 {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .faq-item {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            overflow: hidden;
-        }
-
-        .faq-question {
-            padding: 1.5rem;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--surface);
-            border: none;
-            width: 100%;
-            color: var(--fg);
-            font-size: 1rem;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .faq-question:hover {
-            background: rgba(139, 92, 246, 0.05);
-            color: var(--brand);
-        }
-
-        .faq-question.active {
-            background: rgba(139, 92, 246, 0.1);
-            color: var(--brand);
-        }
-
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-            background: rgba(10, 12, 18, 0.5);
-        }
-
-        .faq-answer.open {
-            max-height: 500px;
-        }
-
-        .faq-answer p {
-            padding: 1.5rem;
-            color: var(--fg-muted);
-            font-size: 0.95rem;
-        }
-
-        /* CTA Final */
-        .final-cta {
-            max-width: 800px;
-            margin: 4rem auto;
-            padding: 3rem 2rem;
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(245, 184, 65, 0.1) 100%);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            text-align: center;
-        }
-
-        .final-cta h3 {
-            margin-bottom: 1rem;
-        }
-
-        .final-cta p {
-            color: var(--fg-muted);
-            margin-bottom: 2rem;
-        }
-
-        /* Footer */
-        footer {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 3rem 2rem;
-            border-top: 1px solid var(--border);
-            color: var(--fg-muted);
-            font-size: 0.9rem;
-            text-align: center;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            h1 { font-size: 2.5rem; }
-            h2 { font-size: 1.75rem; }
-            
-            .header-content {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            nav {
-                flex-direction: column;
-                gap: 1rem;
-                width: 100%;
-            }
-            
-            .pricing-card.featured {
-                transform: scale(1);
-            }
-            
-            header {
-                padding: 1rem;
-            }
-            
-            main {
-                padding-top: 200px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Presupuesta, analiza planos y calcula costos en segundos. Asistente de IA para constructores argentinos. Sin instalación, tus datos siempre bajo control.">
+<meta name="og:title" content="ConstructorIA — Tu asistente de obra experto en IA">
+<meta name="og:description" content="Presupuesta, analiza planos y predice costos. Para constructores que no quieren perder tiempo en Excel.">
+<meta property="og:image" content="https://labstudiopna.github.io/ConstructorIA/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://labstudiopna.github.io/ConstructorIA/og-image.png">
+<meta name="theme-color" content="#0A101C">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="manifest" href="site.webmanifest">
+<title>ConstructorIA — Presupuestos con IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0A101C;--bg-2:#111A2A;--bg-3:#182338;--bg-soft:#0D1524;
+  --border:#1F2C40;--border-soft:#182233;
+  --text:#EAF0F8;--mid:#93A2B8;--dim:#5C6C82;
+  --brand:#C87D2F;--brand-soft:#E09A4F;--brand-2:#E5A662;--brand-2-soft:#F0C088;
+  --amber:#F59E0B;--red:#F87171;--ok:#10B981;--ok-soft:#34D399;
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'Inter',system-ui,-apple-system,sans-serif;
+  --mono:'IBM Plex Mono',monospace;
+  --radius:16px;
+}
+</style>
+<link rel="stylesheet" href="bento.css">
+<script src="tracker.js" defer></script>
 </head>
 <body>
-    <header>
-        <div class="header-content">
-            <a href="#" class="logo">
-                <img src="favicon-192.png" alt="BarIA" class="logo-icon">
-                BarIA
-            </a>
-            <nav>
-                <a href="#features">Características</a>
-                <a href="#pricing">Precios</a>
-                <a href="#faq">Preguntas</a>
-                <a href="#contacto">Contacto</a>
-                <a href="agente-baria.html" class="cta-button">Ir al Agente →</a>
-            </nav>
+
+<nav>
+  <a href="#" class="logo">
+    <img src="favicon-192.png" alt="ConstructorIA">
+    <div class="logo-name">Constructor<em>IA</em></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#features">Características</a></li>
+    <li><a href="#pricing">Precios</a></li>
+    <li><a href="#faq">Preguntas</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+    <li><a href="guia-completa.html" target="_blank">Guía Completa</a></li>
+  </ul>
+  <a href="agente-constructor.html" class="nav-cta" id="nav-cta-desktop">Ir al agente →</a>
+  <button class="hamburger" id="hamburger" aria-label="Abrir menú" onclick="toggleMobileMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#features" onclick="closeMobileMenu()">Características</a>
+  <a href="#pricing" onclick="closeMobileMenu()">Precios</a>
+  <a href="#faq" onclick="closeMobileMenu()">Preguntas</a>
+  <a href="#contacto" onclick="closeMobileMenu()">Contacto</a>
+  <a href="guia-completa.html" target="_blank">Guía Completa</a>
+  <a href="agente-constructor.html" class="nav-cta">Ir al agente →</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow-2"></div>
+  <div class="container hero-grid">
+    <div>
+      <span class="pill"><span class="dot"></span>Hecho en Paraná, para la obra argentina</span>
+      <h1>Del plano al <em>presupuesto exacto</em></h1>
+      <p class="lead">Presupuestá, analizá planos y predecí costos en segundos. Sin instalación, sin complicaciones — tus datos siempre bajo control.</p>
+      <div class="hero-cta">
+        <a href="agente-constructor.html" class="btn btn-primary">Presupuestar mi primer plano →</a>
+        <a href="#features" class="btn btn-ghost">Ver características</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><b>30 seg</b><span>Presupuesto desde el plano</span></div>
+        <div class="hstat"><b>±5%</b><span>Precisión de costo final</span></div>
+        <div class="hstat"><b>24 hs</b><span>Soporte técnico</span></div>
+      </div>
+    </div>
+    <div class="hero-bento">
+      <div class="hb-tile hb-wide" style="grid-row:span 2">
+        <div class="hb-tag">Plano · en vivo</div>
+        <div class="hb-chat-u">"Subí este plano de casa en Paraná"</div>
+        <div class="hb-chat-a">✓ Plano analizado · Área 150 m² · 3 hab, 2 baños, cocina, living</div>
+        <div class="bento-hero-visual" style="margin-top:12px">
+          <div class="bhv-row"><span>Presupuesto estimado</span><b>$45.000–52.000</b></div>
+          <div class="bhv-row"><span>Timeline</span><b>28–35 días</b></div>
         </div>
-    </header>
+      </div>
+      <div class="hb-tile">
+        <div class="hb-big">±5%</div>
+        <div class="hb-lbl">precisión de costo</div>
+      </div>
+      <div class="hb-tile">
+        <div class="hb-big g">30s</div>
+        <div class="hb-lbl">desde el plano</div>
+      </div>
+      <div class="hb-tile hb-wide">
+        <div class="hb-tag">Materiales principales</div>
+        <div class="hb-badges">
+          <span class="hb-badge a">ladrillo</span>
+          <span class="hb-badge a">cemento</span>
+          <span class="hb-badge g">herrería</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <main>
-        <!-- Hero -->
-        <section class="hero" id="inicio">
-            <h1>Costeá tu trago en 10 segundos</h1>
-            <p>Foto o texto. BarIA te devuelve rendimiento de botella, pour cost, margen sugerido y normativa de tu provincia — todo con IA, sin backend, sin instalación.</p>
-            <div class="hero-cta">
-                <a href="agente-baria.html" class="cta-button">Analizar mi primer trago gratis →</a>
-                <a href="#features" class="cta-button cta-button-secondary">Ver características</a>
-            </div>
-        </section>
+<!-- TRUST STRIP -->
+<section class="trust" style="padding:0">
+  <div class="container trust-grid">
+    <div class="tstat"><b><em>30</em>seg</b><span>Presupuesto desde el plano</span></div>
+    <div class="tstat"><b>±<em>5</em>%</b><span>Precisión de costo final</span></div>
+    <div class="tstat"><b>±<em>3</em>d</b><span>Precisión de timeline</span></div>
+    <div class="tstat"><b><em>10</em></b><span>Herramientas de obra incluidas</span></div>
+  </div>
+</section>
 
-        <!-- Features -->
-        <section class="features" id="features">
-            <h2>Todo lo que un bar necesita, en un chat</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">📸</div>
-                    <h3>Costeo por foto o texto</h3>
-                    <p>Subí una foto de tu receta o escribí los ingredientes. BarIA extrae las cantidades y calcula el costo al instante.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🍾</div>
-                    <h3>Rendimiento de botella</h3>
-                    <p>¿Cuántos tragos salen de una botella de 750ml a 50ml por trago? Pour cost automático en segundos.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3>Margen y precio sugerido</h3>
-                    <p>Define tu margen objetivo y BarIA te propone el precio de venta. Alerta si el margen es bajo.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚖️</div>
-                    <h3>Normativa por provincia</h3>
-                    <p>Horarios de expendio, habilitaciones, bromatología, requerimientos UTHGRA — consultá por provincia al instante.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">👥</div>
-                    <h3>Cálculo de sueldos UTHGRA</h3>
-                    <p>Categorías, aumentos vigentes, contribuciones — el agente te ayuda con nómina y paritarias.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📋</div>
-                    <h3>Exporta a Google Sheets</h3>
-                    <p>Tus tragos costeados, márgenes y consultas se guardan en tu propia hoja de cálculo, bajo tu control.</p>
-                </div>
-            </div>
-        </section>
+<!-- FEATURES BENTO -->
+<section id="features">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Características</span>
+      <h2>Diez herramientas, un problema cada una</h2>
+      <p>Del plano al presupuesto, sin pasar por Excel.</p>
+    </div>
 
-        <!-- Pricing -->
-        <section class="pricing" id="pricing">
-            <h2>Planes transparentes</h2>
-            <div class="pricing-grid">
-                <div class="pricing-card">
-                    <h3>Prueba gratis</h3>
-                    <p class="pricing-description">5 días · Sin tarjeta</p>
-                    <div class="pricing-amount">Gratis</div>
-                    <p class="pricing-description">Solo pagás tu consumo de API (~USD 0.002/consulta)</p>
-                    <ul class="pricing-features">
-                        <li>Chat IA para costeo</li>
-                        <li>Foto/texto de recetas</li>
-                        <li>Rendimiento de botella</li>
-                        <li>Consultas normativas</li>
-                        <li>Cálculo de sueldos</li>
-                        <li>Exportar a Sheets</li>
-                    </ul>
-                    <a href="agente-baria.html" class="cta-button">Probar 5 días gratis</a>
-                </div>
-                <div class="pricing-card featured">
-                    <h3>Bar / Restaurante</h3>
-                    <p class="pricing-description">Sin límite de tiempo</p>
-                    <div class="pricing-amount">USD <small>80/mes</small></div>
-                    <p class="pricing-description">TODO lo de la prueba + onboarding y soporte</p>
-                    <ul class="pricing-features">
-                        <li>TODO lo de la prueba gratis</li>
-                        <li>Onboarding 1 a 1</li>
-                        <li>Soporte directo por WhatsApp</li>
-                        <li>Avisos de cambios normativos</li>
-                        <li>Help con Google Sheets</li>
-                        <li>Prioridad para nuevas features</li>
-                    </ul>
-                    <a href="#contacto" class="cta-button">Contratar Plan →</a>
-                </div>
-            </div>
-        </section>
+    <div class="bento-grid">
+      <div class="bento b-2x2">
+        <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+        <h3>Análisis de planos</h3>
+        <p>Subí PDF o JPG. Extrae dimensiones, ambientes y materiales, y genera presupuesto automático en 30 segundos.</p>
+        <div class="bento-hero-visual">
+          <div class="bhv-row"><span>Área detectada</span><b>150 m²</b></div>
+          <div class="bhv-row"><span>Ambientes</span><b>3 hab · 2 baños</b></div>
+        </div>
+      </div>
+      <div class="bento b-2x1">
+        <span class="badge-new">Nuevo</span>
+        <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18M7 6h1v4"/></svg></div>
+        <h3>Cómputos y acero</h3>
+        <p>Hormigón, muros, revoques, contrapisos, yeso y armaduras: cantidades exactas de materiales y kg de hierro a comprar, con costo según tus precios.</p>
+      </div>
+      <div class="bento b-2x1">
+        <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+        <h3>Predicciones</h3>
+        <p>Costo final ±5%, timeline ±3 días. Aprende de tus proyectos anteriores y se mejora cada mes.</p>
+      </div>
+      <div class="bento b-1x1">
+        <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
+        <h3>Chat de obra</h3>
+        <p>Presupuestos, materiales y normativa, todo en un chat.</p>
+      </div>
+      <div class="bento b-1x1">
+        <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg></div>
+        <h3>Hojas diarias de obra</h3>
+        <p>Avance, personal, clima y novedades, exportable en PDF.</p>
+      </div>
+      <div class="bento b-1x1">
+        <span class="badge-new">Nuevo</span>
+        <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/></svg></div>
+        <h3>Verificador de escaleras y rampas</h3>
+        <p>Fórmula de Blondel al instante y verificación de rampas contra la Ley 24.314.</p>
+      </div>
+    </div>
 
-        <!-- FAQ -->
-        <section class="faq" id="faq">
-            <h2>Preguntas frecuentes</h2>
-            
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    ¿Qué es una API key y cuánto cuesta?
-                    <span>+</span>
-                </button>
-                <div class="faq-answer">
-                    <p>Es una clave personal para usar la IA de Anthropic. Creás cuenta gratis en console.anthropic.com, cargás crédito y generás tu key. Costo: ~USD 0.002 por consulta — USD 5 te dan unas 2.500 consultas.</p>
-                </div>
-            </div>
+    <div class="included">
+      <div class="included-head">
+        <h4>También incluido</h4>
+        <span>Sin cargo extra</span>
+      </div>
+      <div class="included-grid">
+        <div class="inc-item"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg></span><b>Proveedores</b> — comparación de precios por material con análisis de conveniencia IA</div>
+        <div class="inc-item"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg></span><b>Certificados de avance</b> — del avance diario al certificado en PDF, listo para firmar</div>
+        <div class="inc-item"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg></span><b>Memoria descriptiva con IA</b> — borrador formal completo para el municipio</div>
+        <div class="inc-item"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg></span><b>Precios de referencia diarios</b> — dólar, UVA e inflación (BCRA/INDEC) sin buscar en otro lado</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    ¿Mis datos y recetas son privados?
-                    <span>+</span>
-                </button>
-                <div class="faq-answer">
-                    <p>Sí. BarIA no tiene backend propio. Tu API key y los archivos van directo de tu navegador a Anthropic. Al cerrar la pestaña, todo se borra. Con el Plan Bar además te avisamos proactivamente de cambios normativos.</p>
-                </div>
-            </div>
+<!-- STEPS -->
+<section style="background:var(--bg-soft);border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft)">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Cómo funciona</span>
+      <h2>Tres pasos hasta tu presupuesto</h2>
+    </div>
+    <div class="steps-wrap">
+      <div class="step">
+        <div class="stepn">1</div>
+        <div>
+          <div class="stept">Ingresá con Google</div>
+          <div class="stepd">Un click. Sin crear usuario, sin contraseñas.</div>
+          <span class="stag">5 segundos</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="stepn">2</div>
+        <div>
+          <div class="stept">Cargá tu API key</div>
+          <div class="stepd">La generás gratis en console.anthropic.com. Nadie más la ve.</div>
+          <span class="stag">1 minuto</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="stepn">3</div>
+        <div>
+          <div class="stept">Subí plano o PDF</div>
+          <div class="stepd">El agente analiza y genera presupuesto automático.</div>
+          <span class="stag">Segundos</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    ¿Reemplaza al POS o al contador?
-                    <span>+</span>
-                </button>
-                <div class="faq-answer">
-                    <p>No. Es una herramienta de apoyo para dueños y encargados de bar. Acelera el costeo de tragos y consultas normativas, pero no toca facturación ni nómina formal. El POS sigue siendo tu caja, tu contador sigue siendo tu firma.</p>
-                </div>
-            </div>
+<!-- PRICING -->
+<section id="pricing">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Precios</span>
+      <h2>Planes simples</h2>
+      <p>El producto es el mismo en todos los planes. Lo que cambia es el acompañamiento.</p>
+    </div>
+    <div class="pgrid">
+      <div class="plan">
+        <h3>Prueba gratis</h3>
+        <div class="price">5 días</div>
+        <div class="period">Acceso completo para probar todo, sin tarjeta</div>
+        <ul>
+          <li><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg></span>Análisis de planos PDF</li>
+          <li><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg></span>Chat de obra IA</li>
+          <li><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg></span>Presupuestos automáticos con PDF</li>
+          <li><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg></span>Hojas diarias de obra</li>
+          <li><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg></span>Predicciones de costo y plazo</li>
+          <li><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg></span>Pagás solo tu API (~$0.01 por análisis)</li>
+        </ul>
+        <a href="agente-constructor.html" class="btn btn-ghost" style="justify-content:center">Probar 5 días</a>
+      </div>
+      <div class="plan feat">
+        <span class="plan-badge">Recomendado</span>
+        <h3>Constructor</h3>
+        <div class="price">USD 80<small>/mes</small></div>
+        <div class="period">Para el que lo usa todos los días en obra</div>
+        <ul>
+          <li><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg></span>Todo de la prueba gratis, sin límite de tiempo</li>
+          <li><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg></span>Onboarding 1 a 1</li>
+          <li><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg></span>Soporte por WhatsApp 24 hs</li>
+          <li><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg></span>Alertas de vencimientos</li>
+          <li><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg></span>Histórico de 12 meses</li>
+          <li><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg></span>Prioridad para features nuevas</li>
+        </ul>
+        <a href="#contacto" class="btn btn-primary" style="justify-content:center">Contratar →</a>
+      </div>
+    </div>
+  </div>
+</section>
 
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    ¿Funciona en el celular?
-                    <span>+</span>
-                </button>
-                <div class="faq-answer">
-                    <p>Sí, completamente responsive. Funciona perfecto en smartphone y tablet sin instalar ninguna app. Ideal para consultar costeos en la barra.</p>
-                </div>
-            </div>
+<!-- FAQ -->
+<section id="faq" style="background:var(--bg-soft);border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft)">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Preguntas frecuentes</span>
+      <h2>Lo que todos preguntan</h2>
+    </div>
+    <div class="faq-wrap">
+      <div class="faqitem">
+        <div class="faqq" onclick="toggleFaq(this)">¿Qué es una API key y cuánto cuesta?<span class="faqico">+</span></div>
+        <div class="faqa">Es una clave personal para usar la IA de Anthropic. Creás cuenta gratis en console.anthropic.com, cargás crédito y generás tu key. Con USD 5 hacés varios cientos de análisis (USD 0.01–0.02 por análisis típico).</div>
+      </div>
+      <div class="faqitem">
+        <div class="faqq" onclick="toggleFaq(this)">¿Mis planos y datos son privados?<span class="faqico">+</span></div>
+        <div class="faqa">Sí. ConstructorIA no tiene backend propio. Tu API key y los archivos van directo de tu navegador a Anthropic. Al cerrar la pestaña, todo se borra salvo lo que vos decidís guardar.</div>
+      </div>
+      <div class="faqitem">
+        <div class="faqq" onclick="toggleFaq(this)">¿Reemplaza al arquitecto o ingeniero?<span class="faqico">+</span></div>
+        <div class="faqa">No. Es una herramienta de apoyo. Acelera presupuestos, análisis y búsqueda de información. La responsabilidad profesional siempre es de quien firma.</div>
+      </div>
+      <div class="faqitem">
+        <div class="faqq" onclick="toggleFaq(this)">¿Las predicciones son exactas?<span class="faqico">+</span></div>
+        <div class="faqa">Apuntan a ±5% en costo y ±3 días en timeline. Mejoran conforme más proyectos analizás. Después de 10–15 proyectos cargados, la precisión sube significativamente.</div>
+      </div>
+      <div class="faqitem">
+        <div class="faqq" onclick="toggleFaq(this)">¿Funciona en el celular?<span class="faqico">+</span></div>
+        <div class="faqa">Sí, completamente responsive. Funciona perfecto en smartphone y tablet sin instalar ninguna app.</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    ¿Qué pasa si mi conexión cae?
-                    <span>+</span>
-                </button>
-                <div class="faq-answer">
-                    <p>Necesitás conexión a internet activa porque BarIA consulta la IA en tiempo real. Pero como no hay backend propio, no hay riesgo de "servidor caído" — si tu internet funciona, BarIA funciona.</p>
-                </div>
-            </div>
-        </section>
+<!-- CTA FINAL -->
+<section id="contacto">
+  <div class="container">
+    <div class="cta-final">
+      <h2>Probalo ahora</h2>
+      <p>Sin registro complicado, sin tarjeta. Solo tu API key y listo.</p>
+      <div class="hero-cta">
+        <a href="agente-constructor.html" class="btn btn-primary">Abrir ConstructorIA →</a>
+        <a href="guia-completa.html" target="_blank" class="btn btn-ghost">Leer la guía completa</a>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <!-- Final CTA -->
-        <section class="final-cta" id="contacto">
-            <h3>Probalo gratis 5 días</h3>
-            <p>Ingresá con Google, pegá tu API key y listo. Sin tarjeta, sin contraseñas.</p>
-            <div class="hero-cta">
-                <a href="agente-baria.html" class="cta-button">Abrir BarIA →</a>
-                <a href="https://wa.me/5493425387578?text=Hola,%20quiero%20info%20sobre%20BarIA" class="cta-button cta-button-secondary">Consultar por WhatsApp</a>
-            </div>
-        </section>
-    </main>
+<!-- CONTACTO -->
+<section style="padding-top:0">
+  <div class="container contact-wrap">
+    <div class="section-head" style="text-align:left;margin-bottom:0">
+      <span class="eyebrow">Contacto</span>
+      <h2>¿Dudas? Escribinos</h2>
+    </div>
+    <form class="cform" id="contactForm" action="https://formspree.io/f/TU_FORM_ID" method="POST">
+      <div class="cfield">
+        <label for="cf-nombre">Nombre</label>
+        <input type="text" id="cf-nombre" name="nombre" placeholder="Tu nombre" required>
+      </div>
+      <div class="cfield">
+        <label for="cf-email">Email</label>
+        <input type="email" id="cf-email" name="email" placeholder="tu@email.com" required>
+      </div>
+      <div class="cfield">
+        <label for="cf-whatsapp">WhatsApp (opcional)</label>
+        <input type="tel" id="cf-whatsapp" name="whatsapp" placeholder="+54 9 ...">
+      </div>
+      <div class="cfield">
+        <label for="cf-mensaje">Tu consulta</label>
+        <textarea id="cf-mensaje" name="mensaje" rows="4" placeholder="Contanos qué necesitás" required></textarea>
+      </div>
+      <button type="submit" class="cform-submit" id="cform-submit">Enviar mensaje</button>
+      <div class="cform-status" id="cform-status" role="status" aria-live="polite"></div>
+      <p style="font-size:12.5px;color:var(--dim);text-align:center">O escribinos directo por <a href="https://wa.me/5493435344597?text=Hola,%20quiero%20info%20sobre%20ConstructorIA" style="color:var(--brand-soft);font-weight:600">WhatsApp</a></p>
+    </form>
+  </div>
+</section>
 
-    <footer>
-        <p><strong>BarIA</strong> — Asistente de costeo y normativa para bares y restaurantes. Tus datos siempre bajo tu control — hecho por LABStudio.pna.</p>
-        <p style="margin-top: 1rem;">© 2026 BarIA · Todos los derechos reservados · Desarrollado por <a href="https://labstudiopna.github.io" style="color: var(--brand-2); text-decoration: none;">LABStudio.pna</a></p>
-    </footer>
+<!-- FOOTER -->
+<footer class="site">
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="logo-name">Constructor<em>IA</em></div>
+        <p>Presupuesta, analiza planos y predice costos de obra con IA. Tus datos siempre bajo tu control — hecho por LABStudio.pna.</p>
+      </div>
+      <div class="foot-links">
+        <b>Producto</b>
+        <a href="#features">Características</a>
+        <a href="#pricing">Precios</a>
+        <a href="guia-completa.html">Guía Completa</a>
+      </div>
+      <div class="foot-links">
+        <b>Soporte</b>
+        <a href="https://wa.me/5493435344597?text=Hola,%20quiero%20info%20sobre%20ConstructorIA">WhatsApp</a>
+        <a href="#faq">FAQ</a>
+        <a href="terminos.html">Términos y Privacidad</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 ConstructorIA · Todos los derechos reservados</span>
+      <span>Desarrollado por <a href="https://labstudiopna.github.io" target="_blank">LABStudio.pna</a> · Paraná, Entre Ríos, Argentina</span>
+    </div>
+  </div>
+</footer>
 
-    <script>
-        function toggleFaq(button) {
-            const answer = button.nextElementSibling;
-            button.classList.toggle('active');
-            answer.classList.toggle('open');
-        }
-    </script>
+<script>
+function toggleMobileMenu(){
+  document.getElementById('hamburger').classList.toggle('active');
+  document.getElementById('mobile-menu').classList.toggle('active');
+}
+function closeMobileMenu(){
+  document.getElementById('hamburger').classList.remove('active');
+  document.getElementById('mobile-menu').classList.remove('active');
+}
+document.querySelector('.logo').addEventListener('click', closeMobileMenu);
+
+function toggleFaq(el){
+  const item=el.parentElement;
+  const isOpen=item.classList.contains('open');
+  document.querySelectorAll('.faqitem').forEach(i=>i.classList.remove('open'));
+  if(!isOpen)item.classList.add('open');
+}
+
+(function(){
+  const isTouch = window.matchMedia('(hover: none)').matches;
+  const cards = document.querySelectorAll('.bento, .hb-tile');
+  cards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      if (isTouch) return;
+      const rx = (((e.clientY - r.top) / r.height) - 0.5) * -4;
+      const ry = (((e.clientX - r.left) / r.width) - 0.5) * 4;
+      card.style.transform = `perspective(700px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-2px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(700px) rotateX(0) rotateY(0) translateY(0)';
+    });
+  });
+})();
+
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.bento, .step, .plan, .hb-tile').forEach(el => {
+  el.style.opacity = '0'; el.style.transform = 'translateY(16px)';
+  el.style.transition = 'opacity .5s ease, transform .5s ease';
+  obs.observe(el);
+});
+
+const contactForm = document.getElementById('contactForm');
+if (contactForm) {
+  contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('cform-submit');
+    const status = document.getElementById('cform-status');
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+    status.className = 'cform-status show';
+    status.textContent = '';
+    try {
+      const res = await fetch(contactForm.action, { method: 'POST', body: new FormData(contactForm), headers: { 'Accept': 'application/json' } });
+      if (res.ok) {
+        status.className = 'cform-status show ok';
+        status.textContent = '¡Mensaje enviado! Te respondemos dentro de las 24 hs.';
+        contactForm.reset();
+      } else { throw new Error('error'); }
+    } catch (err) {
+      status.className = 'cform-status show err';
+      status.textContent = 'No pudimos enviar el mensaje. Escribinos por WhatsApp.';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Enviar mensaje';
+    }
+  });
+}
+</script>
 </body>
 </html>

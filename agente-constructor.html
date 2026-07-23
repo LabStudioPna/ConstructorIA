@@ -282,6 +282,23 @@ table.data tr:hover td{background:var(--bg-alt)}
     </table>
     <div class="empty" id="prEmpty">Todavía no guardaste ningún proyecto. Analizá un plano o cargá uno manual.</div>
     <p class="disclaimer">💡 Al terminar una obra, tocá su fila para cargar costo final y días reales. Con 3+ obras cerradas, las predicciones usan tu desvío real promedio.</p>
+
+    <div class="card" style="margin-top:22px;">
+      <h3 style="font-size:15px;margin-bottom:4px;">🔄 Respaldo y sincronización</h3>
+      <p style="font-size:12px;color:var(--muted);margin:4px 0 12px;">Tus proyectos, hojas diarias, precios de proveedores y certificados hoy viven solo en este navegador. Conectá tu Google Sheets para tener respaldo automático y verlos desde otro dispositivo.</p>
+      <button id="btnConectarGoogle" style="display:flex;align-items:center;justify-content:center;gap:8px;max-width:280px;background:#fff;color:#1F2937;border:1px solid var(--border);border-radius:9px;padding:10px;font-weight:600;font-size:13px;cursor:pointer;">
+        <svg width="15" height="15" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.6-6 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l6-6C33.9 5.5 29.2 3.5 24 3.5 12.9 3.5 4 12.4 4 23.5s8.9 20 20 20 20-8.9 20-20c0-1.4-.1-2.7-.4-3z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8c1.8-4.4 6-7.5 11.1-7.5 3.1 0 5.8 1.1 8 3l6-6C33.9 5.5 29.2 3.5 24 3.5c-7.4 0-13.7 4.3-16.7 10.5z"/><path fill="#4CAF50" d="M24 43.5c5.2 0 9.9-2 13.4-5.2l-6.2-5.2c-2 1.4-4.5 2.2-7.2 2.2-5.3 0-9.7-3.4-11.3-8.1l-6.5 5C9.7 39.1 16.3 43.5 24 43.5z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.2 4.3-4.1 5.7l6.2 5.2C40.9 36.3 44 30.4 44 23.5c0-1.4-.1-2.7-.4-3z"/></svg>
+        Conectar con Google
+      </button>
+      <div id="googleConnectedBadge" style="display:none;align-items:center;justify-content:space-between;background:rgba(46,116,88,.12);border-radius:9px;padding:9px 12px;margin-top:6px;max-width:280px;">
+        <span style="font-size:12px;color:var(--brand-light);font-weight:600;">✅ Conectado</span>
+        <div style="display:flex;gap:10px;">
+          <a id="linkAbrirHoja" href="#" target="_blank" style="font-size:11.5px;color:var(--muted);">Abrir hoja ↗</a>
+          <button id="btnDesconectarGoogle" style="border:none;background:none;color:var(--muted);font-size:11.5px;cursor:pointer;text-decoration:underline;">Desconectar</button>
+        </div>
+      </div>
+      <div id="googleConnectStatus" style="font-size:11.5px;color:var(--muted);margin-top:8px;"></div>
+    </div>
   </section>
 
   <!-- HOJAS DIARIAS -->
@@ -861,8 +878,10 @@ $('prAddBtn').addEventListener('click', ()=>{
   const nombre = $('prNombre').value.trim();
   if (!nombre) return alert('Poné un nombre al proyecto.');
   const list = loadProjects();
-  list.push({ id:Date.now(), nombre, tipo:$('prTipo').value, m2:parseFloat($('prM2').value)||0, presupuesto:parseFloat($('prPresu').value)||0, plazo:parseFloat($('prPlazo').value)||0, costoReal:null, diasReales:null, partidas:[] });
+  const p = { id:Date.now(), nombre, tipo:$('prTipo').value, m2:parseFloat($('prM2').value)||0, presupuesto:parseFloat($('prPresu').value)||0, plazo:parseFloat($('prPlazo').value)||0, costoReal:null, diasReales:null, partidas:[] };
+  list.push(p);
   saveProjects(list); renderProjects();
+  registrarFilaSheets('proyectos', [new Date().toLocaleDateString('es-AR'), p.nombre, p.tipo, p.m2, p.presupuesto, p.plazo]);
   ['prNombre','prM2','prPresu','prPlazo'].forEach(id=>$(id).value='');
 });
 
@@ -884,8 +903,11 @@ $('hjAddBtn').addEventListener('click', ()=>{
   if (!pid) return alert('Elegí un proyecto (crealo antes en la pestaña Proyectos).');
   if (!$('hjFecha').value) return alert('Poné la fecha del parte.');
   const list = loadHojas();
-  list.push({ id:Date.now(), proyectoId:pid, fecha:$('hjFecha').value, avance:parseFloat($('hjAvance').value)||0, personal:parseFloat($('hjPersonal').value)||0, clima:$('hjClima').value, notas:$('hjNotas').value.trim() });
+  const h = { id:Date.now(), proyectoId:pid, fecha:$('hjFecha').value, avance:parseFloat($('hjAvance').value)||0, personal:parseFloat($('hjPersonal').value)||0, clima:$('hjClima').value, notas:$('hjNotas').value.trim() };
+  list.push(h);
   saveHojas(list); renderHojas();
+  const proj = loadProjects().find(x=>x.id==pid);
+  registrarFilaSheets('hojas', [h.fecha, proj?proj.nombre:'', h.avance, h.personal, h.clima, h.notas]);
   $('hjNotas').value='';
 });
 $('hjPdfBtn').addEventListener('click', ()=>{
@@ -978,8 +1000,10 @@ $('pvAddBtn').addEventListener('click', ()=>{
   const material=$('pvMaterial').value.trim(), proveedor=$('pvProveedor').value.trim(), precio=parseFloat($('pvPrecio').value);
   if (!material || !proveedor || !precio) return alert('Completá material, proveedor y precio.');
   const list = loadPrecios();
-  list.push({ id:Date.now(), material, proveedor, precio, entrega:parseFloat($('pvEntrega').value)||null });
+  const entrega = parseFloat($('pvEntrega').value)||null;
+  list.push({ id:Date.now(), material, proveedor, precio, entrega });
   savePrecios(list); renderPrecios();
+  registrarFilaSheets('precios', [new Date().toLocaleDateString('es-AR'), material, proveedor, precio, entrega||'']);
   ['pvProveedor','pvPrecio','pvEntrega'].forEach(id=>$(id).value='');
 });
 $('pvIaBtn').addEventListener('click', async ()=>{
@@ -1350,8 +1374,11 @@ $('certGenBtn').addEventListener('click', ()=>{
   const neto = montoPeriodo - deduccion;
   const list = loadCerts();
   const nro = prev.length + 1;
-  list.push({ id:Date.now(), proyectoId:pid, nro, fecha:new Date().toISOString().slice(0,10), contrato, anticipoPct:antPct, avanceAnterior, avanceActual:avance, montoPeriodo, deduccion, neto });
+  const cert = { id:Date.now(), proyectoId:pid, nro, fecha:new Date().toISOString().slice(0,10), contrato, anticipoPct:antPct, avanceAnterior, avanceActual:avance, montoPeriodo, deduccion, neto };
+  list.push(cert);
   saveCerts(list); renderCerts();
+  const proj = loadProjects().find(x=>x.id==pid);
+  registrarFilaSheets('certificados', [cert.fecha, proj?proj.nombre:'', cert.nro, cert.avanceAnterior+'% → '+cert.avanceActual+'%', cert.montoPeriodo, cert.deduccion, cert.neto]);
   $('certProyecto').dispatchEvent(new Event('change'));
 });
 window.certPdf = function(id){
@@ -1419,6 +1446,127 @@ $('mmPdfBtn').addEventListener('click', ()=>{
   doc.splitTextToSize(texto, 180).forEach(l=>{ if (y>280){ doc.addPage(); y=20; } doc.text(l, 14, y); y += 5.2; });
   doc.save('memoria-descriptiva-constructoria.pdf');
 });
+
+/* ---------- Sincronización con Google Sheets propio (mismo patrón que CampoIA/FiscoIA) ---------- */
+const GOOGLE_CLIENT_ID = '770326349307-rv1uf77479oc8ejrsh3hmhkieqgous2o.apps.googleusercontent.com';
+let googleAccessToken = localStorage.getItem('constructoria_google_token') || '';
+let googleTokenExpira = parseInt(localStorage.getItem('constructoria_google_token_expira') || '0');
+let constructoriaSheetId = localStorage.getItem('constructoria_sheet_id') || '';
+let googleTokenClient = null;
+
+function inicializarGoogleAuth(){
+  if (typeof google === 'undefined' || !google.accounts){ setTimeout(inicializarGoogleAuth, 300); return; }
+  googleTokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: GOOGLE_CLIENT_ID,
+    scope: 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.file',
+    callback: ''
+  });
+  if (constructoriaSheetId) actualizarUIGoogleConectado();
+}
+inicializarGoogleAuth();
+
+$('btnConectarGoogle').addEventListener('click', () => {
+  if (!googleTokenClient){ alert('La conexión con Google todavía está cargando, esperá unos segundos e intentá de nuevo.'); return; }
+  const msg = $('googleConnectStatus');
+  msg.textContent = 'Conectando con Google...';
+  googleTokenClient.callback = async (resp) => {
+    if (resp.error){ msg.textContent = '⚠️ No se pudo conectar: ' + resp.error; return; }
+    googleAccessToken = resp.access_token;
+    googleTokenExpira = Date.now() + (resp.expires_in * 1000);
+    localStorage.setItem('constructoria_google_token', googleAccessToken);
+    localStorage.setItem('constructoria_google_token_expira', String(googleTokenExpira));
+    if (!constructoriaSheetId) await crearHojaConstructorIA();
+    else { msg.textContent = '✅ Conectado con Google Sheets.'; actualizarUIGoogleConectado(); }
+  };
+  googleTokenClient.requestAccessToken({ prompt: constructoriaSheetId ? '' : 'consent' });
+});
+
+async function asegurarTokenValido(){
+  if (googleAccessToken && Date.now() < googleTokenExpira - 60000) return true;
+  return new Promise((resolve) => {
+    googleTokenClient.callback = (resp) => {
+      if (resp.error){ resolve(false); return; }
+      googleAccessToken = resp.access_token;
+      googleTokenExpira = Date.now() + (resp.expires_in * 1000);
+      localStorage.setItem('constructoria_google_token', googleAccessToken);
+      localStorage.setItem('constructoria_google_token_expira', String(googleTokenExpira));
+      resolve(true);
+    };
+    googleTokenClient.requestAccessToken({ prompt: '' });
+  });
+}
+
+const HOJAS_CONSTRUCTORIA = {
+  proyectos: { nombre: 'Proyectos', headers: ['Fecha alta','Nombre','Tipo','m²','Presupuesto est.','Plazo est. (días)'] },
+  hojas: { nombre: 'Hojas_Diarias', headers: ['Fecha','Proyecto','Avance %','Personal','Clima','Novedades'] },
+  precios: { nombre: 'Precios_Proveedores', headers: ['Fecha','Material','Proveedor','Precio','Entrega (días)'] },
+  certificados: { nombre: 'Certificados', headers: ['Fecha','Proyecto','Nro','Avance período','Monto período','Deducción','Neto'] }
+};
+
+async function crearHojaConstructorIA(){
+  const msg = $('googleConnectStatus');
+  msg.textContent = 'Creando tu hoja de cálculo...';
+  try{
+    const resCrear = await fetch('https://sheets.googleapis.com/v4/spreadsheets', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + googleAccessToken, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        properties: { title: 'ConstructorIA - Mis Datos' },
+        sheets: Object.values(HOJAS_CONSTRUCTORIA).map(h => ({ properties: { title: h.nombre } }))
+      })
+    });
+    const data = await resCrear.json();
+    if (!resCrear.ok) throw new Error(data.error?.message || 'Error creando la hoja');
+    constructoriaSheetId = data.spreadsheetId;
+    localStorage.setItem('constructoria_sheet_id', constructoriaSheetId);
+    for (const h of Object.values(HOJAS_CONSTRUCTORIA)){
+      await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${constructoriaSheetId}/values/${encodeURIComponent(h.nombre)}!A1:${String.fromCharCode(65 + h.headers.length - 1)}1?valueInputOption=RAW`, {
+        method: 'PUT',
+        headers: { 'Authorization': 'Bearer ' + googleAccessToken, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ values: [h.headers] })
+      });
+    }
+    msg.textContent = '✅ ¡Listo! Tu hoja fue creada y conectada.';
+    actualizarUIGoogleConectado();
+  }catch(e){
+    msg.textContent = '⚠️ Error creando la hoja: ' + e.message;
+  }
+}
+
+function actualizarUIGoogleConectado(){
+  $('googleConnectedBadge').style.display = 'flex';
+  $('btnConectarGoogle').style.display = 'none';
+  $('linkAbrirHoja').href = `https://docs.google.com/spreadsheets/d/${constructoriaSheetId}/edit`;
+}
+
+$('btnDesconectarGoogle').addEventListener('click', () => {
+  if (!confirm('¿Desconectar tu Google Sheets? Vas a poder volver a conectarte cuando quieras — tu hoja no se borra.')) return;
+  googleAccessToken = ''; googleTokenExpira = 0; constructoriaSheetId = '';
+  localStorage.removeItem('constructoria_google_token');
+  localStorage.removeItem('constructoria_google_token_expira');
+  localStorage.removeItem('constructoria_sheet_id');
+  $('googleConnectedBadge').style.display = 'none';
+  $('btnConectarGoogle').style.display = 'flex';
+  $('googleConnectStatus').textContent = '';
+});
+
+// Agrega una fila a la hoja correspondiente. No bloqueante — si falla, no interrumpe al usuario.
+async function registrarFilaSheets(claveHoja, fila){
+  if (!constructoriaSheetId) return;
+  const h = HOJAS_CONSTRUCTORIA[claveHoja];
+  if (!h) return;
+  const ok = await asegurarTokenValido();
+  if (!ok) return;
+  try{
+    await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${constructoriaSheetId}/values/${encodeURIComponent(h.nombre)}!A:Z:append?valueInputOption=RAW`, {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + googleAccessToken, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ values: [fila] })
+    });
+  }catch(e){
+    console.warn('Registro a Google Sheets falló silenciosamente:', e);
+  }
+}
 
 /* ---------- init ---------- */
 renderCmFields();
