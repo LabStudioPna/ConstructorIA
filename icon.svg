@@ -1,19 +1,45 @@
-<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="256" y2="256" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#A06A33"/>
-      <stop offset="1" stop-color="#3E2C17"/>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#3B1F73"/>
     </linearGradient>
   </defs>
-  <rect width="256" height="256" rx="56" fill="url(#bg)"/>
-  <!-- hard hat: brim -->
-  <ellipse cx="128" cy="176" rx="80" ry="14" fill="#FAF8F5"/>
-  <!-- hard hat: dome -->
-  <path d="M52 176 A76 76 0 0 1 204 176 Z" fill="#FAF8F5"/>
-  <!-- ridge grooves -->
-  <line x1="128" y1="102" x2="128" y2="174" stroke="#3E2C17" stroke-width="5" stroke-linecap="round" opacity="0.32"/>
-  <line x1="96" y1="112" x2="110" y2="174" stroke="#3E2C17" stroke-width="5" stroke-linecap="round" opacity="0.32"/>
-  <line x1="160" y1="112" x2="146" y2="174" stroke="#3E2C17" stroke-width="5" stroke-linecap="round" opacity="0.32"/>
-  <!-- AI spark accent -->
-  <path d="M198 84 L206 100 L222 108 L206 116 L198 132 L190 116 L174 108 L190 100 Z" fill="#E09A4F"/>
+
+  <!-- Fondo squircle con degradé violeta -->
+  <rect x="0" y="0" width="192" height="192" rx="42" ry="42" fill="url(#bgGrad)"/>
+
+  <!-- Copa de cóctel (martini/coupe), glifo plano color crema -->
+  <path d="
+    M 54 52
+    Q 54 46 60 46
+    L 132 46
+    Q 138 46 138 52
+    Q 138 58 134 62
+    L 100 96
+    L 100 132
+    L 118 132
+    Q 122 132 122 138
+    Q 122 144 118 144
+    L 74 144
+    Q 70 144 70 138
+    Q 70 132 74 132
+    L 92 132
+    L 92 96
+    L 58 62
+    Q 54 58 54 52
+    Z"
+    fill="#F7F3EC"/>
+
+  <!-- Destello dorado (acento IA), superpuesto arriba a la derecha de la copa -->
+  <path d="M 148 34
+    L 152.5 45.5
+    L 164 50
+    L 152.5 54.5
+    L 148 66
+    L 143.5 54.5
+    L 132 50
+    L 143.5 45.5
+    Z"
+    fill="#F5B841"/>
 </svg>

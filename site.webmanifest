@@ -1,14 +1,31 @@
 {
-  "name": "ConstructorIA",
-  "short_name": "ConstructorIA",
-  "description": "Tu asistente de obra experto en IA — presupuestos, análisis de planos, renders 3D y predicciones de costos.",
+  "name": "BarIA — Asistente de Costeo para Bares",
+  "short_name": "BarIA",
+  "description": "Costeá tragos, controlá márgenes y consulta normativa provincial con IA",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#F9FAFB",
-  "theme_color": "#C87D2F",
+  "background_color": "#0A0C12",
+  "theme_color": "#8B5CF6",
+  "orientation": "portrait-primary",
   "icons": [
-    { "src": "favicon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "favicon-512.png", "sizes": "512x512", "type": "image/png" }
+    {
+      "src": "favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }
