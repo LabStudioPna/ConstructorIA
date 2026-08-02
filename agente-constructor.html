@@ -144,6 +144,26 @@ table.data tr:hover td{background:var(--bg-alt)}
 .lab-key-input{width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:14px;font-family:monospace}
 .lab-enter-btn{width:100%;margin-top:18px;background:var(--brand);color:#fff;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:600;cursor:pointer;font-family:var(--sans);transition:opacity .2s}
 .lab-enter-btn:disabled{opacity:.45;cursor:not-allowed}
+
+/* --- Renders IA --- */
+.rd-spinner-box{text-align:center;padding:32px 20px;border:2px dashed var(--border);border-radius:14px;margin-top:14px}
+.rd-spinner{width:42px;height:42px;border:3px solid var(--border);border-top-color:var(--brand);border-radius:50%;animation:rdspin .9s linear infinite;margin:0 auto 14px}
+@keyframes rdspin{to{transform:rotate(360deg)}}
+.rd-progress{height:5px;background:var(--border);border-radius:3px;margin-top:14px;overflow:hidden;max-width:280px;margin-left:auto;margin-right:auto}
+.rd-progress-fill{height:100%;background:var(--brand);transition:width .4s ease;width:0%}
+.rd-spinner-box small{display:block;color:var(--muted);font-size:11.5px;margin-top:10px}
+.rd-error-box{border:1px solid var(--bad);background:rgba(176,74,58,.08);border-radius:12px;padding:18px;margin-top:14px;text-align:center;color:var(--bad);font-size:13.5px}
+.rd-image-box{margin-top:14px}
+.rd-image-box img{width:100%;border-radius:12px;border:1px solid var(--border);margin-bottom:10px}
+.rd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-top:6px}
+.rd-card{background:var(--bg-alt);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;transition:all .15s}
+.rd-card:hover{border-color:var(--brand-light);transform:translateY(-2px)}
+.rd-card img{width:100%;height:110px;object-fit:cover;display:block}
+.rd-card-ph{width:100%;height:110px;display:flex;align-items:center;justify-content:center;background:var(--bg);font-size:11px;color:var(--muted)}
+.rd-card-meta{padding:8px 10px}
+.rd-card-meta h5{font-size:11.5px;font-weight:600;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rd-card-meta span{font-size:10px}
+#rdConnDot{transition:background .3s}
 </style>
 </head>
 <body>
@@ -211,6 +231,7 @@ table.data tr:hover td{background:var(--bg-alt)}
     <button class="tab-btn" data-tab="proveedores"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="15" height="15" style="vertical-align:-3px;margin-right:4px;flex-shrink:0"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Proveedores</button>
     <button class="tab-btn" data-tab="memoria"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="15" height="15" style="vertical-align:-3px;margin-right:4px;flex-shrink:0"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>Memoria</button>
     <button class="tab-btn" data-tab="preciosref"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="15" height="15" style="vertical-align:-3px;margin-right:4px;flex-shrink:0"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Precios hoy</button>
+    <button class="tab-btn" data-tab="renders"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="15" height="15" style="vertical-align:-3px;margin-right:4px;flex-shrink:0"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>Renders IA</button>
   </div>
 
   <div class="keybox">
@@ -411,7 +432,7 @@ table.data tr:hover td{background:var(--bg-alt)}
     </div>
     <div class="card" style="margin-top:18px;">
       <h3 style="font-size:15px;margin-bottom:6px;">Materiales por provincia</h3>
-      <p class="sub" style="margin-bottom:12px;">Promedio relevado en corralones de todo el país, con el desvío de cada provincia. Sirve para ubicarte, no para presupuestar.</p>
+      <p class="sub" style="margin-bottom:12px;">Promedio relevado en corralones de todo el país, con el desvío de cada provincia. Para ubicarte, no para presupuestar.</p>
       <div class="grid-form">
         <div class="field" style="margin-bottom:0;"><label>Material</label><select id="matProd"></select></div>
         <div class="field" style="margin-bottom:0;"><label>Tu provincia</label><select id="matProv"></select></div>
@@ -504,6 +525,69 @@ table.data tr:hover td{background:var(--bg-alt)}
       </div>
     </div>
     <p class="disclaimer">⚠️ Borrador generado por IA — revisalo y adaptalo antes de presentarlo. Los requisitos formales de memoria varían según municipio y colegio profesional.</p>
+  </section>
+
+  <section class="panel" id="panel-renders">
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="15" height="15" style="vertical-align:-3px;margin-right:4px;flex-shrink:0"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>Renders con IA</h2>
+    <p class="sub">Describí el proyecto y generá una imagen de referencia con IA. Corre sobre la Constructoria Render API (cola de jobs + FAL.ai/MNML.ai).</p>
+
+    <div class="card" id="rdConnCard">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <span id="rdConnDot" style="width:9px;height:9px;border-radius:50%;background:var(--warn);flex-shrink:0;"></span>
+        <span id="rdConnText" style="font-size:13px;color:var(--muted);">Verificando conexión con la API…</span>
+        <div class="f" style="margin-left:auto;min-width:220px;max-width:280px;">
+          <input id="rdApiUrl" type="text" placeholder="http://localhost:3000" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:12.5px;font-family:var(--sans);">
+        </div>
+      </div>
+      <p class="hint" style="margin-top:8px;">Si no hay API corriendo, el panel usa un <strong>modo demo</strong> local para que puedas probar el flujo igual.</p>
+    </div>
+
+    <div class="card" id="rdAuthCard">
+      <div class="grid-form">
+        <div class="field" style="margin-bottom:0;"><label>Email</label><input type="email" id="rdEmail" placeholder="vos@estudio.com"></div>
+        <div class="field" style="margin-bottom:0;"><label>Contraseña</label><input type="password" id="rdPassword" placeholder="••••••••"></div>
+        <div class="field" style="margin-bottom:0;"><label>Nombre (solo si te registrás)</label><input type="text" id="rdName" placeholder="Tu nombre"></div>
+      </div>
+      <button class="btn btn-brand" id="rdLoginBtn">Iniciar sesión</button>
+      <button class="btn btn-ghost" id="rdSignupBtn" style="margin-left:8px;">Crear cuenta</button>
+      <span id="rdAuthStatus" style="margin-left:10px;font-size:12.5px;color:var(--muted);"></span>
+    </div>
+
+    <div class="card" id="rdFormCard" style="display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+        <h3 style="font-size:15px;">Generar nuevo render</h3>
+        <span id="rdUserBadge" class="pill info"></span>
+      </div>
+      <div class="field"><label>Descripción del proyecto</label><textarea id="rdPrompt" placeholder="Ej: Casa moderna de dos plantas, revestimiento en piedra y madera, grandes ventanales, techo plano con cubierta verde"></textarea></div>
+      <div class="grid-form">
+        <div class="field" style="margin-bottom:0;">
+          <label>Estilo</label>
+          <select id="rdStyle">
+            <option value="modern">Moderno</option>
+            <option value="minimalist">Minimalista</option>
+            <option value="contemporary">Contemporáneo</option>
+            <option value="luxury">Lujo</option>
+          </select>
+        </div>
+        <div class="field" style="margin-bottom:0;">
+          <label>Motor de IA</label>
+          <select id="rdModel">
+            <option value="flux">Flux (FAL.ai)</option>
+            <option value="mnml">MNML.ai</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn btn-brand" id="rdGenBtn" style="margin-top:12px;">✨ Generar render</button>
+    </div>
+
+    <div id="rdResult"></div>
+
+    <div class="card">
+      <h3 style="font-size:15px;margin-bottom:10px;">Tus renders</h3>
+      <div id="rdHistory"><p class="empty">Iniciá sesión para ver tu historial.</p></div>
+    </div>
+
+    <p class="disclaimer">⚠️ Las imágenes generadas son referencias conceptuales para presentar al cliente, no reemplazan un render técnico ni un plano de obra.</p>
   </section>
 
 </div>
@@ -715,7 +799,7 @@ async function buildFileBlock(file){
 }
 
 /* ---------- Chat ---------- */
-const SYSTEM_CHAT = `Sos el asistente de obra de ConstructorIA, para constructores, contratistas y maestros mayores de obra en Argentina. Ayudás con: presupuestos y cómputos, rendimientos de materiales (cemento, hierro, ladrillos, etc.), dosificaciones, normativa de obra, seguridad e higiene, secuencia de tareas y lectura de planos. Respondé en español rioplatense, claro y al grano, con números concretos cuando se pueda. Si te adjuntan un plano o documento, analizalo. Aclarás cuando un dato depende de la zona o del precio del día. Nunca inventás precios exactos actuales: das rangos u órdenes de magnitud y recomendás validar con el corralón local. Si te preguntan por precios de materiales, mencionales que en la pestaña "Precios hoy" hay un promedio nacional relevado en corralones con el desvío de cada provincia, aclarando siempre que es un promedio de referencia y no un precio de lista: entre la provincia más barata y la más cara hay diferencias de más del 50%.`;
+const SYSTEM_CHAT = `Sos el asistente de obra de ConstructorIA, para constructores, contratistas y maestros mayores de obra en Argentina. Ayudás con: presupuestos y cómputos, rendimientos de materiales (cemento, hierro, ladrillos, etc.), dosificaciones, normativa de obra, seguridad e higiene, secuencia de tareas y lectura de planos. Respondé en español rioplatense, claro y al grano, con números concretos cuando se pueda. Si te adjuntan un plano o documento, analizalo. Aclarás cuando un dato depende de la zona o del precio del día. Nunca inventás precios exactos actuales: das rangos u órdenes de magnitud y recomendás validar con el corralón local. Si te preguntan por precios de materiales, mencioná que en la pestaña "Precios hoy" hay un promedio nacional relevado en corralones con el desvío de cada provincia — aclarando siempre que es promedio de referencia, no precio de lista. La diferencia entre la provincia más barata y la más cara supera el 50%.`;
 let chatHistory = [];
 let chatAttach = null;
 
@@ -1298,68 +1382,55 @@ document.querySelector('[data-tab="preciosref"]').addEventListener('click', ()=>
 const MAT_URL = 'https://vps-6064485-x.dattaweb.com/webhook/constructoria/nacional/promedio';
 const MAT_PROVINCIAS = ['Buenos Aires','CABA','Catamarca','Chaco','Chubut','Corrientes','Cordoba','Entre Rios','Formosa','Jujuy','La Pampa','La Rioja','Mendoza','Misiones','Neuquen','Rio Negro','Salta','San Juan','San Luis','Santa Cruz','Santa Fe','Santiago del Estero','Tierra del Fuego','Tucuman'];
 const MAT_MATERIALES = ['cemento','ladrillo','hierro','arena','cal'];
-
 (function initMat(){
-  const p = $('matProd'), v = $('matProv');
-  if (!p || !v) return;
-  p.innerHTML = MAT_MATERIALES.map(m=>'<option value="'+m+'">'+m.charAt(0).toUpperCase()+m.slice(1)+'</option>').join('');
-  v.innerHTML = '<option value="">— sin comparar —</option>' + MAT_PROVINCIAS.map(x=>'<option value="'+x+'">'+x+'</option>').join('');
-  const guardada = localStorage.getItem('constructoria_provincia');
-  if (guardada) v.value = guardada;
+  const p=$('matProd'), v=$('matProv');
+  if(!p||!v) return;
+  p.innerHTML=MAT_MATERIALES.map(m=>'<option value="'+m+'">'+m.charAt(0).toUpperCase()+m.slice(1)+'</option>').join('');
+  v.innerHTML='<option value="">— sin comparar —</option>'+MAT_PROVINCIAS.map(x=>'<option value="'+x+'">'+x+'</option>').join('');
+  const g=localStorage.getItem('constructoria_provincia'); if(g) v.value=g;
 })();
-
 function matFmt(n){ return '$'+Number(n||0).toLocaleString('es-AR',{maximumFractionDigits:0}); }
-
 function pintarMat(d){
-  const box = $('matResult');
-  const nac = d.promedio_nacional || {};
-  const filas = d.desglose_por_provincia || [];
-  let html = '<div class="row-mini"><span>Promedio nacional</span><span class="big">'+matFmt(nac.valor)+'</span></div>';
-  html += '<div class="row-mini"><span>Rango en el país</span><span>'+matFmt(nac.precio_minimo)+' — '+matFmt(nac.precio_maximo)+'</span></div>';
-  html += '<div class="row-mini"><span>Relevado en</span><span>'+(nac.proveedores||0)+' proveedores de '+(nac.provincias_con_datos||0)+' provincias</span></div>';
-
-  const mia = d.provincia_consultada;
-  if (mia && !mia.sin_datos){
-    const signo = mia.diferencia_vs_nacional_pct >= 0 ? '+' : '';
-    html += '<div class="row-mini" style="border-top:1px dashed var(--border);margin-top:8px;padding-top:10px;"><span>'+mia.provincia+'</span><span class="big">'+matFmt(mia.precio_promedio)+'</span></div>';
-    html += '<div class="row-mini"><span>Diferencia vs nacional</span><span>'+signo+(mia.diferencia_vs_nacional_pct||0)+'%</span></div>';
-    if (mia.advertencia) html += '<div style="font-size:12px;color:var(--muted);margin-top:8px;">⚠️ '+mia.advertencia+'</div>';
-  } else if (mia && mia.sin_datos){
-    html += '<div style="font-size:12px;color:var(--muted);margin-top:10px;border-top:1px dashed var(--border);padding-top:10px;">Todavía no hay registros de '+mia.provincia+'. El promedio nacional te sirve de referencia, pero conviene pedir cotización local.</div>';
+  const box=$('matResult'), nac=d.promedio_nacional||{}, filas=d.desglose_por_provincia||[];
+  let html='<div class="row-mini"><span>Promedio nacional</span><span class="big">'+matFmt(nac.valor)+'</span></div>';
+  html+='<div class="row-mini"><span>Rango en el país</span><span>'+matFmt(nac.precio_minimo)+' — '+matFmt(nac.precio_maximo)+'</span></div>';
+  html+='<div class="row-mini"><span>Relevado en</span><span>'+(nac.proveedores||0)+' proveedores · '+(nac.provincias_con_datos||0)+' provincias</span></div>';
+  const mia=d.provincia_consultada;
+  if(mia&&!mia.sin_datos){
+    const s=mia.diferencia_vs_nacional_pct>=0?'+':'';
+    html+='<div class="row-mini" style="border-top:1px dashed var(--border);margin-top:8px;padding-top:10px;"><span>'+mia.provincia+'</span><span class="big">'+matFmt(mia.precio_promedio)+'</span></div>';
+    html+='<div class="row-mini"><span>Diferencia vs nacional</span><span>'+s+(mia.diferencia_vs_nacional_pct||0)+'%</span></div>';
+    if(mia.advertencia) html+='<div style="font-size:12px;color:var(--muted);margin-top:8px;">⚠️ '+mia.advertencia+'</div>';
+  } else if(mia&&mia.sin_datos){
+    html+='<div style="font-size:12px;color:var(--muted);margin-top:10px;border-top:1px dashed var(--border);padding-top:10px;">Todavía no hay registros de '+mia.provincia+'. El promedio nacional sirve de referencia, pero pedí cotización local.</div>';
   }
-
-  if (filas.length){
-    const rows = filas.slice().sort((a,b)=>a.precio_promedio-b.precio_promedio).map(function(f){
-      const s = f.diferencia_vs_nacional_pct >= 0 ? '+' : '';
-      const conf = f.datos_confiables ? '' : ' <span title="menos de 10 registros" style="color:var(--muted);">⚠️</span>';
+  if(filas.length){
+    const rows=filas.slice().sort((a,b)=>a.precio_promedio-b.precio_promedio).map(f=>{
+      const s=f.diferencia_vs_nacional_pct>=0?'+':'';
+      const conf=f.datos_confiables?'':' <span title="menos de 10 registros" style="color:var(--muted);">⚠️</span>';
       return '<tr><td>'+f.provincia+conf+'</td><td style="text-align:right;">'+matFmt(f.precio_promedio)+'</td><td style="text-align:right;font-size:11.5px;color:var(--muted);">'+s+(f.diferencia_vs_nacional_pct||0)+'%</td><td style="text-align:center;font-size:11.5px;color:var(--muted);">'+(f.registros||0)+'</td></tr>';
     }).join('');
-    html += '<div style="overflow-x:auto;margin-top:14px;"><table class="data"><thead><tr><th>Provincia</th><th style="text-align:right;">Promedio</th><th style="text-align:right;">vs país</th><th style="text-align:center;">Datos</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+    html+='<div style="overflow-x:auto;margin-top:14px;"><table class="data"><thead><tr><th>Provincia</th><th style="text-align:right;">Promedio</th><th style="text-align:right;">vs país</th><th style="text-align:center;">Datos</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
   }
-
-  if (d.aclaracion) html += '<div style="font-size:11.5px;color:var(--muted);margin-top:14px;border-top:1px dashed var(--border);padding-top:10px;">'+d.aclaracion+'</div>';
-  box.innerHTML = html;
+  if(d.aclaracion) html+='<div style="font-size:11.5px;color:var(--muted);margin-top:14px;border-top:1px dashed var(--border);padding-top:10px;">'+d.aclaracion+'</div>';
+  box.innerHTML=html;
 }
-
 async function consultarMat(){
-  const prod = $('matProd').value, prov = $('matProv').value;
-  const box = $('matResult');
-  box.style.display = 'block';
-  box.innerHTML = '<span class="loading"><span></span><span></span><span></span></span> Consultando corralones…';
-  if (prov) localStorage.setItem('constructoria_provincia', prov);
+  const prod=$('matProd').value, prov=$('matProv').value, box=$('matResult');
+  box.style.display='block';
+  box.innerHTML='<span class="loading"><span></span><span></span><span></span></span> Consultando corralones…';
+  if(prov) localStorage.setItem('constructoria_provincia',prov);
   try{
-    const url = MAT_URL+'?producto='+encodeURIComponent(prod)+(prov?'&provincia='+encodeURIComponent(prov):'')+'&t='+Date.now();
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('http '+res.status);
-    const data = await res.json();
-    if (!data || data.success === false || !data.promedio_nacional) throw new Error('sin datos');
+    const res=await fetch(MAT_URL+'?producto='+encodeURIComponent(prod)+(prov?'&provincia='+encodeURIComponent(prov):'')+  '&t='+Date.now());
+    if(!res.ok) throw new Error('http '+res.status);
+    const data=await res.json();
+    if(!data||!data.promedio_nacional) throw new Error('sin datos');
     pintarMat(data);
   }catch(e){
-    box.innerHTML = '<div style="font-size:13px;">📋 El relevamiento de corralones todavía no está disponible.</div>'+
-      '<div style="font-size:12px;color:var(--muted);margin-top:8px;">Mientras tanto podés cargar los precios que te pasan tus proveedores en la pestaña <strong>Proveedores</strong> — esos sí quedan guardados y alimentan la calculadora de cómputos.</div>';
+    box.innerHTML='<div style="font-size:13px;">📋 El relevamiento de corralones todavía no está disponible.</div><div style="font-size:12px;color:var(--muted);margin-top:8px;">Mientras tanto cargá los precios que te pasan tus proveedores en la pestaña <strong>Proveedores</strong> — esos alimentan la calculadora de cómputos.</div>';
   }
 }
-if ($('matBtn')) $('matBtn').addEventListener('click', consultarMat);
+if($('matBtn')) $('matBtn').addEventListener('click', consultarMat);
 
 /* ---------- Verificador ---------- */
 $('veEscBtn').addEventListener('click', ()=>{
@@ -1572,6 +1643,264 @@ async function asegurarTokenValido(){
     googleTokenClient.requestAccessToken({ prompt: '' });
   });
 }
+
+// ============================================
+// RENDERS IA — Constructoria Render API
+// (con fallback automático a modo demo si la API no responde)
+// ============================================
+(function(){
+  const rd = {
+    apiUrl: localStorage.getItem('rd_api_url') || 'http://localhost:3000',
+    token: localStorage.getItem('rd_token') || null,
+    mode: null, // 'live' | 'demo'
+    renders: [], // usado solo en modo demo
+    credits: 5,
+    userName: '',
+  };
+
+  $('rdApiUrl').value = rd.apiUrl;
+  $('rdApiUrl').addEventListener('change', e => {
+    rd.apiUrl = e.target.value.trim() || 'http://localhost:3000';
+    localStorage.setItem('rd_api_url', rd.apiUrl);
+    rdCheckConnection();
+  });
+
+  async function rdCheckConnection(){
+    $('rdConnDot').style.background = 'var(--warn)';
+    $('rdConnText').textContent = 'Verificando conexión con la API…';
+    try {
+      const ctrl = new AbortController();
+      const t = setTimeout(() => ctrl.abort(), 1500);
+      const res = await fetch(rd.apiUrl + '/health', { signal: ctrl.signal });
+      clearTimeout(t);
+      if (res.ok) {
+        rd.mode = 'live';
+        $('rdConnDot').style.background = 'var(--ok)';
+        $('rdConnText').textContent = 'Conectado a la API real (' + rd.apiUrl + ')';
+        return;
+      }
+      throw new Error('bad status');
+    } catch (err) {
+      rd.mode = 'demo';
+      $('rdConnDot').style.background = 'var(--brand-light)';
+      $('rdConnText').textContent = 'Sin API disponible — usando modo demo (datos locales, no se guardan)';
+    }
+  }
+
+  // ============================================
+  // AUTH
+  // ============================================
+  $('rdLoginBtn').addEventListener('click', () => rdAuth('login'));
+  $('rdSignupBtn').addEventListener('click', () => rdAuth('signup'));
+
+  async function rdAuth(kind){
+    const email = $('rdEmail').value.trim();
+    const password = $('rdPassword').value;
+    const name = $('rdName').value.trim();
+    if (!email || !password) { $('rdAuthStatus').textContent = 'Completá email y contraseña'; return; }
+    if (kind === 'signup' && !name) { $('rdAuthStatus').textContent = 'Completá tu nombre para registrarte'; return; }
+
+    $('rdAuthStatus').textContent = 'Procesando…';
+
+    if (rd.mode === 'live') {
+      try {
+        const res = await fetch(`${rd.apiUrl}/api/users/${kind}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(kind === 'signup' ? { email, password, name } : { email, password }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Error de autenticación');
+        rd.token = data.token;
+        rd.credits = data.credits;
+        rd.userName = data.name;
+        localStorage.setItem('rd_token', rd.token);
+        $('rdAuthStatus').textContent = '';
+        rdShowFormLoggedIn();
+        rdConnectWS();
+        rdLoadHistory();
+      } catch (err) {
+        $('rdAuthStatus').textContent = '❌ ' + err.message;
+      }
+    } else {
+      // Modo demo: no valida contra nada, simula sesión local
+      rd.token = 'demo-token';
+      rd.credits = 5;
+      rd.userName = name || email.split('@')[0];
+      rd.renders = [];
+      $('rdAuthStatus').textContent = '';
+      rdShowFormLoggedIn();
+      $('rdHistory').innerHTML = '<p class="empty">Todavía no generaste ningún render.</p>';
+    }
+  }
+
+  function rdShowFormLoggedIn(){
+    $('rdAuthCard').style.display = 'none';
+    $('rdFormCard').style.display = 'block';
+    $('rdUserBadge').textContent = (rd.mode === 'demo' ? '🎭 demo · ' : '') + rd.userName + ' · ' + rd.credits + ' créditos';
+  }
+
+  // ============================================
+  // CREAR RENDER
+  // ============================================
+  $('rdGenBtn').addEventListener('click', rdGenerate);
+
+  async function rdGenerate(){
+    const prompt = $('rdPrompt').value.trim();
+    const style = $('rdStyle').value;
+    const aiModel = $('rdModel').value;
+    if (!prompt) { alert('Escribí una descripción del proyecto'); return; }
+
+    $('rdGenBtn').disabled = true;
+    rdShowSpinner();
+
+    if (rd.mode === 'live') {
+      try {
+        const res = await fetch(`${rd.apiUrl}/api/renders`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${rd.token}` },
+          body: JSON.stringify({ prompt, style, aiModel, title: prompt.slice(0, 40) }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'No se pudo crear el render');
+        $('rdUserBadge').textContent = rd.userName + ' · ' + data.creditsRemaining + ' créditos';
+        $('rdPrompt').value = '';
+        // La actualización llega por WebSocket (rdConnectWS)
+      } catch (err) {
+        rdShowError(err.message);
+        $('rdGenBtn').disabled = false;
+      }
+    } else {
+      // Modo demo: simula el pipeline completo (cola -> worker -> IA -> listo)
+      const id = 'demo-' + Date.now();
+      const render = { id, prompt, style, aiModel, status: 'pending', title: prompt.slice(0, 40), createdAt: new Date().toISOString(), imageUrl: null };
+      rd.renders.unshift(render);
+      rd.credits -= 1;
+      $('rdUserBadge').textContent = '🎭 demo · ' + rd.userName + ' · ' + rd.credits + ' créditos';
+      $('rdPrompt').value = '';
+
+      setTimeout(() => {
+        render.status = 'processing';
+        rdUpdateProgress(45);
+      }, 900);
+
+      setTimeout(() => {
+        render.status = 'completed';
+        render.imageUrl = rdMockImage(prompt, style);
+        rdShowImage(render.imageUrl);
+        rdRenderHistory();
+        $('rdGenBtn').disabled = false;
+      }, 3200);
+    }
+  }
+
+  // Generador de imagen placeholder (mismo criterio que el server demo)
+  function rdMockImage(prompt, style){
+    const palettes = {
+      modern: ['#8A5A2B','#C87D2F','#FAF8F5'],
+      minimalist: ['#241B12','#6E5F4B','#FFFFFF'],
+      contemporary: ['#2B2118','#E09A4F','#F1ECE4'],
+      luxury: ['#171208','#C87D2F','#F1ECE4'],
+    };
+    const [c1,c2,bg] = palettes[style] || palettes.modern;
+    const label = (prompt.length > 55 ? prompt.slice(0,55) + '…' : prompt).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+      <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${bg}"/><stop offset="100%" stop-color="${c2}" stop-opacity="0.25"/></linearGradient></defs>
+      <rect width="800" height="600" fill="url(#sky)"/>
+      <rect x="150" y="260" width="500" height="280" fill="${c1}" opacity="0.85" rx="6"/>
+      <rect x="150" y="260" width="500" height="40" fill="${c2}"/>
+      <rect x="230" y="340" width="90" height="120" fill="${bg}" opacity="0.9"/>
+      <rect x="360" y="340" width="90" height="120" fill="${bg}" opacity="0.9"/>
+      <rect x="490" y="340" width="90" height="120" fill="${bg}" opacity="0.9"/>
+      <polygon points="150,260 400,150 650,260" fill="${c2}"/>
+      <circle cx="700" cy="100" r="35" fill="#F2C572" opacity="0.9"/>
+      <text x="400" y="580" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="${c1}">${label}</text>
+      <text x="400" y="30" text-anchor="middle" font-family="sans-serif" font-size="12" fill="${c1}" opacity="0.6">Render generado (demo) · estilo ${style}</text>
+    </svg>`;
+    return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)));
+  }
+
+  // ============================================
+  // UI DE RESULTADO
+  // ============================================
+  function rdShowSpinner(){
+    $('rdResult').innerHTML = `
+      <div class="rd-spinner-box">
+        <div class="rd-spinner"></div>
+        <p style="font-size:13.5px;color:var(--muted)">Generando tu render…</p>
+        <div class="rd-progress"><div class="rd-progress-fill" id="rdProgressFill" style="width:15%"></div></div>
+        <small>Esto puede tardar unos minutos con la API real</small>
+      </div>`;
+  }
+  function rdUpdateProgress(pct){
+    const fill = $('rdProgressFill');
+    if (fill) fill.style.width = pct + '%';
+  }
+  function rdShowError(msg){
+    $('rdResult').innerHTML = `<div class="rd-error-box">❌ ${msg}</div>`;
+  }
+  function rdShowImage(url){
+    $('rdResult').innerHTML = `
+      <div class="rd-image-box">
+        <img src="${url}" alt="Render generado">
+        <button class="btn btn-brand" onclick="(function(){const a=document.createElement('a');a.href='${url}';a.download='render.svg';a.click();})()">⬇ Descargar</button>
+      </div>`;
+  }
+
+  function rdRenderHistory(){
+    if (rd.renders.length === 0) {
+      $('rdHistory').innerHTML = '<p class="empty">Todavía no generaste ningún render.</p>';
+      return;
+    }
+    $('rdHistory').innerHTML = '<div class="rd-grid">' + rd.renders.map(r => `
+      <div class="rd-card">
+        ${r.imageUrl ? `<img src="${r.imageUrl}" alt="${r.title}">` : `<div class="rd-card-ph">${r.status === 'failed' ? '❌' : '⏳ ' + r.status}</div>`}
+        <div class="rd-card-meta">
+          <h5>${r.title || 'Sin título'}</h5>
+          <span class="pill ${r.status === 'completed' ? 'ok' : r.status === 'failed' ? 'warn' : 'info'}">${r.status}</span>
+        </div>
+      </div>`).join('') + '</div>';
+  }
+
+  async function rdLoadHistory(){
+    if (rd.mode !== 'live') return;
+    try {
+      const res = await fetch(`${rd.apiUrl}/api/renders?page=1&limit=12`, {
+        headers: { 'Authorization': `Bearer ${rd.token}` },
+      });
+      const data = await res.json();
+      rd.renders = data.data || [];
+      rdRenderHistory();
+    } catch (err) { /* silencioso */ }
+  }
+
+  // ============================================
+  // WEBSOCKET (solo modo live)
+  // ============================================
+  function rdConnectWS(){
+    if (rd.mode !== 'live') return;
+    try {
+      const wsUrl = rd.apiUrl.replace(/^http/, 'ws') + '/ws?token=' + rd.token;
+      const ws = new WebSocket(wsUrl);
+      ws.onmessage = (event) => {
+        const msg = JSON.parse(event.data);
+        if (msg.type === 'render:update') {
+          const { status, imageUrl, error } = msg.data;
+          if (status === 'processing') rdUpdateProgress(55);
+          if (status === 'completed') { rdShowImage(imageUrl); rdLoadHistory(); $('rdGenBtn').disabled = false; }
+          if (status === 'failed') { rdShowError(error || 'Error procesando el render'); $('rdGenBtn').disabled = false; }
+        }
+      };
+      ws.onclose = () => setTimeout(rdConnectWS, 4000);
+    } catch (err) { /* silencioso */ }
+  }
+
+  // Init
+  rdCheckConnection().then(() => {
+    // En modo demo no persistimos sesión real entre recargas (no tiene backend real detrás)
+    if (rd.token && rd.mode === 'live') { rdShowFormLoggedIn(); rdLoadHistory(); rdConnectWS(); }
+  });
+})();
 
 const HOJAS_CONSTRUCTORIA = {
   proyectos: { nombre: 'Proyectos', headers: ['Fecha alta','Nombre','Tipo','m²','Presupuesto est.','Plazo est. (días)'] },

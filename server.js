@@ -1,309 +1,339 @@
+/**
+ * ============================================
+ * CONSTRUCTORIA - SERVIDOR DEMO (sin Mongo/Redis)
+ * ============================================
+ * Misma API que la versión production (docker-compose),
+ * pero con almacenamiento en memoria para poder probar
+ * el flujo completo sin infraestructura externa.
+ *
+ * Para pasar a producción: reemplazar los Maps por
+ * Mongoose models y el setTimeout del worker por un
+ * Bull Queue real (ver CONSTRUCTORIA_GUIDE.md).
+ */
+
 const express = require('express');
-const pg = require('pg');
-const bcryptjs = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const http = require('http');
 const cors = require('cors');
-require('dotenv').config();
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const { WebSocketServer } = require('ws');
+const { v4: uuidv4 } = require('uuid');
 
+const JWT_SECRET = 'demo-secret-cambiar-en-produccion';
+const PORT = 3000;
+
+// ============================================
+// "BASE DE DATOS" EN MEMORIA
+// ============================================
+const users = new Map();      // email -> user
+const usersById = new Map();  // id -> user
+const renders = new Map();    // id -> render
+
+// ============================================
+// APP
+// ============================================
 const app = express();
-const PORT = process.env.PORT || 3000;
-const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-key-change-in-prod';
-
-// PostgreSQL Pool
-const pool = new pg.Pool({
-  host: process.env.DB_HOST || 'localhost',
-  port: process.env.DB_PORT || 5432,
-  database: process.env.DB_NAME || 'constructoria',
-  user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || 'password',
-  max: 20,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
-});
-
-// Middleware
+const server = http.createServer(app);
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
 
-// Logging
-app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} ${req.method} ${req.path}`);
-  next();
+// ============================================
+// WEBSOCKET
+// ============================================
+const wss = new WebSocketServer({ server, path: '/ws' });
+const clientsByUser = new Map(); // userId -> [ws, ws...]
+
+wss.on('connection', (ws, req) => {
+  const url = new URL(req.url, `http://${req.headers.host}`);
+  const token = url.searchParams.get('token');
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const userId = decoded.id;
+
+    if (!clientsByUser.has(userId)) clientsByUser.set(userId, []);
+    clientsByUser.get(userId).push(ws);
+    console.log(`✅ WS conectado: usuario ${userId}`);
+
+    ws.on('close', () => {
+      const list = clientsByUser.get(userId) || [];
+      clientsByUser.set(userId, list.filter((c) => c !== ws));
+    });
+  } catch (err) {
+    ws.close(1008, 'Token inválido');
+  }
 });
 
-// JWT Middleware
-const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-  if (!token) return res.status(401).json({ error: 'No token' });
+function pushToUser(userId, payload) {
+  const list = clientsByUser.get(userId) || [];
+  list.forEach((ws) => {
+    if (ws.readyState === ws.OPEN) ws.send(JSON.stringify(payload));
+  });
+}
 
-  jwt.verify(token, JWT_SECRET, (err, user) => {
-    if (err) return res.status(403).json({ error: 'Invalid token' });
-    req.user = user;
+// ============================================
+// AUTH MIDDLEWARE
+// ============================================
+function auth(req, res, next) {
+  const header = req.headers.authorization;
+  if (!header || !header.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Token no proporcionado' });
+  }
+  try {
+    const decoded = jwt.verify(header.substring(7), JWT_SECRET);
+    req.userId = decoded.id;
     next();
+  } catch (err) {
+    res.status(401).json({ error: 'Token inválido' });
+  }
+}
+
+// ============================================
+// GENERADOR DE IMÁGENES "IA" (mock)
+// ============================================
+// Genera un SVG placeholder representando el render,
+// para simular lo que devolvería FAL.ai / MNML.ai
+function generateMockImage(prompt, style) {
+  const palettes = {
+    modern: ['#8A5A2B', '#C87D2F', '#FAF8F5'],
+    minimalist: ['#241B12', '#6E5F4B', '#FFFFFF'],
+    contemporary: ['#2B2118', '#E09A4F', '#F1ECE4'],
+    luxury: ['#171208', '#C87D2F', '#F1ECE4'],
+  };
+  const [c1, c2, bg] = palettes[style] || palettes.modern;
+  const label = prompt.length > 60 ? prompt.slice(0, 60) + '…' : prompt;
+
+  const svg = `
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${bg}"/>
+      <stop offset="100%" stop-color="${c2}" stop-opacity="0.25"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#sky)"/>
+  <rect x="150" y="260" width="500" height="280" fill="${c1}" opacity="0.85" rx="6"/>
+  <rect x="150" y="260" width="500" height="40" fill="${c2}"/>
+  <rect x="230" y="340" width="90" height="120" fill="${bg}" opacity="0.9"/>
+  <rect x="360" y="340" width="90" height="120" fill="${bg}" opacity="0.9"/>
+  <rect x="490" y="340" width="90" height="120" fill="${bg}" opacity="0.9"/>
+  <polygon points="150,260 400,150 650,260" fill="${c2}"/>
+  <circle cx="700" cy="100" r="35" fill="#F2C572" opacity="0.9"/>
+  <text x="400" y="580" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="${c1}">
+    ${label.replace(/&/g, '&amp;').replace(/</g, '&lt;')}
+  </text>
+  <text x="400" y="30" text-anchor="middle" font-family="sans-serif" font-size="12" fill="${c1}" opacity="0.6">
+    Render generado · estilo ${style}
+  </text>
+</svg>`.trim();
+
+  return `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`;
+}
+
+// ============================================
+// RUTAS: HEALTH
+// ============================================
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', mode: 'demo-in-memory', timestamp: new Date().toISOString() });
+});
+
+// ============================================
+// RUTAS: USUARIOS
+// ============================================
+app.post('/api/users/signup', async (req, res) => {
+  const { email, password, name, whatsappNumber } = req.body;
+
+  if (!email || !password || !name) {
+    return res.status(400).json({ error: 'Email, password y name son requeridos' });
+  }
+  if (users.has(email.toLowerCase())) {
+    return res.status(409).json({ error: 'Email ya registrado' });
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const id = uuidv4();
+  const user = {
+    id,
+    email: email.toLowerCase(),
+    password: hashedPassword,
+    name,
+    whatsappNumber: whatsappNumber || null,
+    credits: 5,
+    subscription: 'free',
+    createdAt: new Date().toISOString(),
+  };
+
+  users.set(user.email, user);
+  usersById.set(id, user);
+
+  const token = jwt.sign({ id }, JWT_SECRET, { expiresIn: '7d' });
+  console.log(`✅ Usuario creado: ${email}`);
+
+  res.status(201).json({ id, token, name, email: user.email, credits: user.credits });
+});
+
+app.post('/api/users/login', async (req, res) => {
+  const { email, password } = req.body;
+  const user = users.get((email || '').toLowerCase());
+
+  if (!user) return res.status(401).json({ error: 'Credenciales inválidas' });
+
+  const valid = await bcrypt.compare(password, user.password);
+  if (!valid) return res.status(401).json({ error: 'Credenciales inválidas' });
+
+  const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '7d' });
+  console.log(`✅ Login: ${email}`);
+
+  res.json({ id: user.id, token, name: user.name, email: user.email, credits: user.credits });
+});
+
+app.get('/api/users/profile', auth, (req, res) => {
+  const user = usersById.get(req.userId);
+  if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+
+  const { password, ...publicUser } = user;
+  res.json(publicUser);
+});
+
+app.put('/api/users/profile', auth, (req, res) => {
+  const user = usersById.get(req.userId);
+  if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+
+  Object.assign(user, req.body, { id: user.id, email: user.email, password: user.password });
+  const { password, ...publicUser } = user;
+  res.json(publicUser);
+});
+
+// ============================================
+// RUTAS: RENDERS
+// ============================================
+app.post('/api/renders', auth, (req, res) => {
+  const { prompt, title, style, aiModel } = req.body;
+  const user = usersById.get(req.userId);
+
+  if (!prompt) return res.status(400).json({ error: 'Prompt es requerido' });
+  if (user.credits <= 0) {
+    return res.status(402).json({ error: 'Créditos insuficientes', code: 'INSUFFICIENT_CREDITS' });
+  }
+
+  const id = uuidv4();
+  const render = {
+    id,
+    userId: user.id,
+    prompt,
+    title: title || 'Render sin título',
+    style: style || 'modern',
+    aiModel: aiModel || 'flux',
+    status: 'pending',
+    imageUrl: null,
+    error: null,
+    createdAt: new Date().toISOString(),
+  };
+  renders.set(id, render);
+  user.credits -= 1;
+
+  console.log(`📥 Render creado: ${id} - "${prompt.slice(0, 40)}..."`);
+
+  res.status(201).json({
+    id,
+    status: 'pending',
+    creditsRemaining: user.credits,
+    message: 'Render en cola de procesamiento',
   });
-};
 
-// ============ AUTH ENDPOINTS ============
+  // ============================================
+  // SIMULACIÓN DEL WORKER (Bull en producción)
+  // ============================================
+  setTimeout(() => {
+    render.status = 'processing';
+    pushToUser(user.id, {
+      type: 'render:update',
+      data: { renderId: id, status: 'processing' },
+    });
+    console.log(`⚙️  Procesando: ${id}`);
 
-// Register
-app.post('/api/auth/register', async (req, res) => {
-  try {
-    const { email, password, firstName, lastName } = req.body;
-    if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
+    setTimeout(() => {
+      try {
+        const imageUrl = generateMockImage(render.prompt, render.style);
+        render.status = 'completed';
+        render.imageUrl = imageUrl;
+        render.completedAt = new Date().toISOString();
 
-    const hashedPassword = await bcryptjs.hash(password, 10);
-    const result = await pool.query(
-      'INSERT INTO users (email, password_hash, first_name, last_name) VALUES ($1, $2, $3, $4) RETURNING id, email',
-      [email, hashedPassword, firstName || '', lastName || '']
-    );
-
-    const token = jwt.sign({ id: result.rows[0].id, email }, JWT_SECRET, { expiresIn: '24h' });
-    res.status(201).json({ user: result.rows[0], token });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Registration failed', details: err.message });
-  }
+        pushToUser(user.id, {
+          type: 'render:update',
+          data: { renderId: id, status: 'completed', imageUrl },
+        });
+        console.log(`✅ Completado: ${id}`);
+      } catch (err) {
+        render.status = 'failed';
+        render.error = err.message;
+        pushToUser(user.id, {
+          type: 'render:update',
+          data: { renderId: id, status: 'failed', error: err.message },
+        });
+      }
+    }, 3000);
+  }, 1500);
 });
 
-// Login
-app.post('/api/auth/login', async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
+app.get('/api/renders', auth, (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
 
-    const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-    if (result.rows.length === 0) return res.status(401).json({ error: 'Invalid credentials' });
+  const userRenders = Array.from(renders.values())
+    .filter((r) => r.userId === req.userId)
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-    const user = result.rows[0];
-    const valid = await bcryptjs.compare(password, user.password_hash);
-    if (!valid) return res.status(401).json({ error: 'Invalid credentials' });
+  const start = (page - 1) * limit;
+  const paginated = userRenders.slice(start, start + limit);
 
-    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '24h' });
-    res.json({ user: { id: user.id, email: user.email }, token });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Login failed' });
-  }
-});
-
-// ============ PROJECT ENDPOINTS ============
-
-// Create project
-app.post('/api/projects', authenticateToken, async (req, res) => {
-  try {
-    const { name, description, budget } = req.body;
-    const result = await pool.query(
-      'INSERT INTO projects (user_id, name, description, budget, status) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-      [req.user.id, name || 'Untitled', description || '', budget || 0, 'active']
-    );
-    res.status(201).json(result.rows[0]);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to create project' });
-  }
-});
-
-// List projects
-app.get('/api/projects', authenticateToken, async (req, res) => {
-  try {
-    const result = await pool.query(
-      'SELECT * FROM projects WHERE user_id = $1 ORDER BY created_at DESC',
-      [req.user.id]
-    );
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to fetch projects' });
-  }
-});
-
-// Get project
-app.get('/api/projects/:id', authenticateToken, async (req, res) => {
-  try {
-    const result = await pool.query(
-      'SELECT * FROM projects WHERE id = $1 AND user_id = $2',
-      [req.params.id, req.user.id]
-    );
-    if (result.rows.length === 0) return res.status(404).json({ error: 'Project not found' });
-    res.json(result.rows[0]);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to fetch project' });
-  }
-});
-
-// Update project
-app.put('/api/projects/:id', authenticateToken, async (req, res) => {
-  try {
-    const { name, description, budget, status } = req.body;
-    const result = await pool.query(
-      'UPDATE projects SET name = $1, description = $2, budget = $3, status = $4 WHERE id = $5 AND user_id = $6 RETURNING *',
-      [name, description, budget, status, req.params.id, req.user.id]
-    );
-    if (result.rows.length === 0) return res.status(404).json({ error: 'Project not found' });
-    res.json(result.rows[0]);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to update project' });
-  }
-});
-
-// ============ BUDGET ITEMS ENDPOINTS ============
-
-// Add budget item
-app.post('/api/projects/:id/items', authenticateToken, async (req, res) => {
-  try {
-    const { description, quantity, unit_price } = req.body;
-    const total = (quantity || 0) * (unit_price || 0);
-
-    const result = await pool.query(
-      'INSERT INTO budget_items (project_id, description, quantity, unit_price, total) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-      [req.params.id, description || '', quantity || 0, unit_price || 0, total]
-    );
-    res.status(201).json(result.rows[0]);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to create item' });
-  }
-});
-
-// List items
-app.get('/api/projects/:id/items', authenticateToken, async (req, res) => {
-  try {
-    const result = await pool.query(
-      'SELECT * FROM budget_items WHERE project_id = $1 ORDER BY created_at',
-      [req.params.id]
-    );
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to fetch items' });
-  }
-});
-
-// Update item
-app.put('/api/items/:id', authenticateToken, async (req, res) => {
-  try {
-    const { description, quantity, unit_price } = req.body;
-    const total = (quantity || 0) * (unit_price || 0);
-
-    const result = await pool.query(
-      'UPDATE budget_items SET description = $1, quantity = $2, unit_price = $3, total = $4 WHERE id = $5 RETURNING *',
-      [description, quantity, unit_price, total, req.params.id]
-    );
-    if (result.rows.length === 0) return res.status(404).json({ error: 'Item not found' });
-    res.json(result.rows[0]);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to update item' });
-  }
-});
-
-// Delete item
-app.delete('/api/items/:id', authenticateToken, async (req, res) => {
-  try {
-    const result = await pool.query('DELETE FROM budget_items WHERE id = $1', [req.params.id]);
-    res.json({ success: true });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to delete item' });
-  }
-});
-
-// ============ PREDICTIONS ENDPOINT ============
-
-// Get predictions
-app.get('/api/projects/:id/predictions', authenticateToken, async (req, res) => {
-  try {
-    const result = await pool.query(
-      'SELECT * FROM predictions WHERE project_id = $1 ORDER BY created_at DESC',
-      [req.params.id]
-    );
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to fetch predictions' });
-  }
-});
-
-// ============ SUPPLIERS ENDPOINT ============
-
-// Compare suppliers
-app.get('/api/suppliers/compare', async (req, res) => {
-  try {
-    const { material, quantity } = req.query;
-    // Placeholder: In production, this would call real supplier APIs
-    const suppliers = [
-      { name: 'Ferretería Central', price: 2.50 * (quantity || 1), delivery: '2-3 días' },
-      { name: 'Acero y Estructuras', price: 2.35 * (quantity || 1), delivery: '5-7 días' },
-      { name: 'Azulejos Premium', price: 45 * (quantity || 1), delivery: '3-4 días' }
-    ];
-    res.json(suppliers);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to compare suppliers' });
-  }
-});
-
-// ============ FLOOR PLAN ANALYSIS ============
-
-// Analyze floor plan (mock endpoint)
-app.post('/api/projects/:id/analyze-plan', authenticateToken, async (req, res) => {
-  try {
-    // Mock response - in production, integrates with Claude Vision
-    const analysis = {
-      area_m2: 150,
-      rooms: ['Sala', 'Cocina', 'Baño', 'Dormitorio', 'Lavadero'],
-      estimated_cost: '$45,000 - $52,000',
-      timeline_days: 31,
-      materials: ['Ladrillo', 'Cemento', 'Hierro', 'Azulejos']
-    };
-    res.json(analysis);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Analysis failed' });
-  }
-});
-
-// ============ 3D RENDERS ============
-
-// Generate render (mock endpoint)
-app.post('/api/projects/:id/render', authenticateToken, async (req, res) => {
-  try {
-    // Mock response - in production, integrates with Midjourney
-    const render = {
-      style: req.body.style || 'photorealistic',
-      status: 'generating',
-      url: 'https://example.com/render.png'
-    };
-    res.json(render);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Render failed' });
-  }
-});
-
-// ============ ERROR HANDLING ============
-
-app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).json({ error: 'Internal server error' });
-});
-
-// ============ START SERVER ============
-
-pool.connect((err) => {
-  if (err) {
-    console.error('Database connection error:', err);
-    process.exit(1);
-  }
-  console.log('Connected to PostgreSQL');
-
-  app.listen(PORT, () => {
-    console.log(`✅ ConstructorIA API running on port ${PORT}`);
+  res.json({
+    success: true,
+    data: paginated,
+    pagination: {
+      page,
+      limit,
+      total: userRenders.length,
+      pages: Math.ceil(userRenders.length / limit),
+    },
   });
 });
 
-module.exports = app;
+app.get('/api/renders/stats/summary', auth, (req, res) => {
+  const userRenders = Array.from(renders.values()).filter((r) => r.userId === req.userId);
+  res.json({
+    success: true,
+    data: {
+      total: userRenders.length,
+      completed: userRenders.filter((r) => r.status === 'completed').length,
+      processing: userRenders.filter((r) => r.status === 'processing' || r.status === 'pending').length,
+      failed: userRenders.filter((r) => r.status === 'failed').length,
+    },
+  });
+});
+
+app.get('/api/renders/:id', auth, (req, res) => {
+  const render = renders.get(req.params.id);
+  if (!render || render.userId !== req.userId) {
+    return res.status(404).json({ error: 'Render no encontrado' });
+  }
+  res.json({ success: true, data: render });
+});
+
+app.delete('/api/renders/:id', auth, (req, res) => {
+  const render = renders.get(req.params.id);
+  if (!render || render.userId !== req.userId) {
+    return res.status(404).json({ error: 'Render no encontrado' });
+  }
+  renders.delete(req.params.id);
+  res.json({ success: true, message: 'Render eliminado' });
+});
+
+// ============================================
+// START
+// ============================================
+server.listen(PORT, () => {
+  console.log(`🚀 Constructoria DEMO server en http://localhost:${PORT}`);
+  console.log(`📡 WebSocket en ws://localhost:${PORT}/ws`);
+  console.log(`ℹ️  Modo: en memoria (sin Mongo/Redis) - reinicia y se borra todo`);
+});
